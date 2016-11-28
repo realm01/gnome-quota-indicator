@@ -6,7 +6,7 @@ This window shows detailed information about the quota.
 from gi.repository import Gtk
 from threading import Thread
 from time import sleep
-from lib.helpers import sys_call
+from lib.helpers import sys_call, get_path
 
 
 class QuotaWindow(Gtk.Window):
@@ -19,6 +19,7 @@ class QuotaWindow(Gtk.Window):
         self.set_title(self.app.name)
         self.set_resizable(False)
         self.resize(200, 400)
+        self.set_icon_from_file(get_path('../img/icon_normal.png'))
 
         self.usage = []
         self.usage_updater = Usage(self)

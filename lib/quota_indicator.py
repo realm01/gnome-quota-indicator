@@ -2,7 +2,7 @@
 
 from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
-from lib.helpers import sys_call
+from lib.helpers import sys_call, get_path
 
 
 class MenuItem():
@@ -24,7 +24,7 @@ class QuotaIndicator():
 
         self.ind = AppIndicator.Indicator.new(
             self.app.name,
-            'Quota',
+            get_path('../img/icon_normal.png'),
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
@@ -86,6 +86,13 @@ class QuotaIndicator():
 
             self.menu_items['quota'].label.set_text('Quota ' + str(int(curr)) + '/' + str(int(hard)) + ' MB')
             self.menu_items['quota'].progressbar.set_fraction(curr / hard)
+
+            if curr / hard >= 0.9:
+                self.ind.set_icon(get_path('../img/icon_warning.png'))
+
+            if curr / hard >= 9.9:
+                self.ind.set_icon(get_path('../img/icon_critical.png'))
+
         except:
             self.menu_items['quota'].label.set_text('No Quota')
             self.menu_items['quota'].progressbar.set_fraction(0.0)

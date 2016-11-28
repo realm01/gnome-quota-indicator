@@ -7,7 +7,7 @@ import yaml
 
 def load_config():
     """"Load configuration format it and return it."""
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../app.conf')) as file:
+    with open(get_path('../app.conf')) as file:
         config = yaml.load(file)
 
     use_etc_exports = config.get('use_etc_exports')
@@ -35,3 +35,7 @@ def sys_call(cmd):
     out = out[0].decode('utf-8')
 
     return out
+
+
+def get_path(file):
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
