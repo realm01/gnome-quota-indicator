@@ -1,3 +1,5 @@
+"""Controller of Quota Window."""
+
 from lib.mvc.quota_window.model import QuotaWindowModel
 from lib.mvc.quota_window.view import QuotaWindowView
 from threading import Thread
@@ -6,12 +8,16 @@ from lib.helpers import sys_call
 
 
 class QuotaWindowController():
+    """Controller of Quota Window."""
+
     def __init__(self, app):
+        """Ctor of QuotaWindowController."""
         self.model = QuotaWindowModel()
         self.view = QuotaWindowView(app, self.model)
 
         self.usage = Usage(self.model)
         self.usage.start()
+
 
 class Usage(Thread):
     """Thread which runs du and updates QuotaWindow."""

@@ -1,9 +1,14 @@
+"""View of QuotaWindowView."""
+
 from gi.repository import Gtk
 from lib.helpers import get_path
 
 
 class QuotaWindowView(Gtk.Window):
+    """View of QuotaWindowView."""
+
     def __init__(self, app, model):
+        """Ctor of QuotaWindowView."""
         Gtk.Window.__init__(self)
 
         self.app = app

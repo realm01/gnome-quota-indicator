@@ -1,8 +1,13 @@
+"""Model of Quota Window."""
+
 from gi.repository import Gtk
 
 
 class QuotaWindowModel():
+    """Model of Quota Window."""
+
     def __init__(self):
+        """Ctor of QuotaWindowModel."""
         self.usage = []
 
     def create_model(self):

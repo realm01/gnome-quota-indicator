@@ -1,3 +1,5 @@
+"""View of Quota Indicator."""
+
 from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
 from lib.helpers import get_path
@@ -5,7 +7,10 @@ from lib.mvc.quota_indicator.model import MenuItem
 
 
 class QuotaIndicatorView():
+    """View of Quota Indicator."""
+
     def __init__(self, app, model):
+        """Ctor of QuotaIndicatorView."""
         self.app = app
         self.model = model
 
@@ -60,12 +65,15 @@ class QuotaIndicatorView():
         self.menu.append(item)
 
     def register_update_quota(self, func):
+        """Register update quota event."""
         self.upd_quota = func
 
     def register_update_fs(self, func):
+        """Register update fs event."""
         self.upd_fs = func
 
     def update_quota(self):
+        """Update quota event."""
         if self.upd_quota is not None:
             r = self.upd_quota()
 
@@ -76,6 +84,7 @@ class QuotaIndicatorView():
         return True
 
     def update_fs(self):
+        """Update fs event."""
         if self.upd_fs is not None:
             r = self.upd_fs()
 

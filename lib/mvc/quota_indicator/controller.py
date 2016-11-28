@@ -1,10 +1,15 @@
+"""Controller of Quota Indicator."""
+
 from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path
 
 
 class QuotaIndicatorController():
+    """Controller of Quota Indicator."""
+
     def __init__(self, app):
+        """Ctor of QuotaIndicatorController."""
         self.model = QuotaIndicatorModel()
         self.view = QuotaIndicatorView(app, self.model)
 
