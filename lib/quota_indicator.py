@@ -96,6 +96,7 @@ class QuotaIndicator():
         except:
             self.menu_items['quota'].label.set_text('No Quota')
             self.menu_items['quota'].progressbar.set_fraction(0.0)
+            self.ind.set_icon(get_path('../img/icon_normal.png'))
 
     def update_fs(self):
         """Execute df filter specified fs and update labels."""

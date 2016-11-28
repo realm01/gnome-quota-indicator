@@ -78,7 +78,7 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            out = sys_call('du  ~/Documents/Projects/gnome-quota-indicator')
+            out = sys_call('du  ~/.')
             lines = out.splitlines()
 
             lines.sort(key=lambda x: x[0])
