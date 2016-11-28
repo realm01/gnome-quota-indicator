@@ -6,6 +6,7 @@ currently logged in user"""
 from gi.repository import Gtk
 from lib.mvc.quota_indicator.controller import QuotaIndicatorController
 from lib.mvc.quota_window.controller import QuotaWindowController
+import signal
 
 
 class App(Gtk.Application):
@@ -25,5 +26,6 @@ class App(Gtk.Application):
 
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = App('Quota Indicator')
     app.run()
