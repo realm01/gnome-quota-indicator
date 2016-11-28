@@ -46,10 +46,6 @@ class QuotaIndicator():
         # refresh quota
         GLib.timeout_add(1000, self.update_quota)
 
-    def cb_exit(self, w, data):
-        """On application quit."""
-        Gtk.main_quit()
-
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""
         proc = sp.Popen(['quota'], stdout=sp.PIPE, shell=False)
