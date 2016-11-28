@@ -4,9 +4,9 @@ This window shows detailed information about the quota.
 """
 
 from gi.repository import Gtk
-import subprocess as sp
 from threading import Thread
 from time import sleep
+from lib.helpers import sys_call
 
 
 class QuotaWindow(Gtk.Window):
@@ -77,9 +77,7 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            proc = sp.Popen('du  ~/Documents/Projects/gnome-quota-indicator', stdout=sp.PIPE, shell=True)
-            out = proc.communicate()
-            out = out[0].decode('utf-8')
+            out = sys_call('du  ~/Documents/Projects/gnome-quota-indicator')
             lines = out.splitlines()
 
             lines.sort(key=lambda x: x[0])
@@ -92,7 +90,5 @@ class Usage(Thread):
                 ll[0] = "{0:.4f}".format(float(line[0])/1024) + 'MB'
 
                 self.window.usage.append(ll)
-
-            print(self.window.usage)
 
             sleep(10 * 60)
