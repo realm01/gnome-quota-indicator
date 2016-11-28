@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-
-"""GNOME task bar indicator which shows the user quota of the
-currently logged in user"""
+"""Quota indicator package, contains classes for the indicator."""
 
 from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
@@ -70,37 +67,3 @@ class QuotaIndicator():
 
         self.quota_label.set_text(str(int(curr)) + '/' + str(int(hard)) + ' MB')
         self.quota_progression_bar.set_fraction(curr / hard)
-
-
-class QuotaWindow(Gtk.Window):
-    """Quota window, which shows a more detailed status about the quota."""
-
-    def __init__(self, app):
-        """Quota window ctor."""
-        super().__init__()
-        self.app = app
-        self.set_title(self.app.name)
-
-    def cb_show(self, w, data):
-        """On show."""
-        self.show()
-
-
-class App(Gtk.Application):
-    """Entry point of the indicator app."""
-
-    def __init__(self, name):
-        """Ctor Main app."""
-        super().__init__()
-        self.name = name
-        self.quota_window = QuotaWindow(self)
-        self.indicator = QuotaIndicator(self)
-
-    def run(self):
-        """Run app."""
-        Gtk.main()
-
-
-if __name__ == '__main__':
-    app = App('Quota Indicator')
-    app.run()
