@@ -43,12 +43,14 @@ class QuotaWindow(Gtk.Window):
 
     def cb_show(self, w, data):
         """On show."""
+
         self.tree_view.set_model(self.create_model())
         self.show_all()
 
         return True
 
     def close_window(self, arg1, arg2):
+        """"On window close."""
         self.hide()
         return True
 
