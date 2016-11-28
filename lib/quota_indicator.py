@@ -98,6 +98,8 @@ class QuotaIndicator():
             self.menu_items['quota'].progressbar.set_fraction(0.0)
             self.ind.set_icon(get_path('../img/icon_normal.png'))
 
+        return True
+
     def update_fs(self):
         """Execute df filter specified fs and update labels."""
         for fs in self.config['fs']:
@@ -122,3 +124,5 @@ class QuotaIndicator():
 
             self.menu_items[fs].progressbar.set_fraction(used / size)
             self.menu_items[fs].label.set_text(fs + ' ' + used_s + '/' + size_s + size_type)
+
+        return True

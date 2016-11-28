@@ -16,6 +16,9 @@ class QuotaWindow(Gtk.Window):
         """Quota window ctor."""
         super().__init__()
         self.app = app
+
+        self.connect("delete-event", self.close_window)
+
         self.set_title(self.app.name)
         self.set_resizable(False)
         self.resize(200, 400)
@@ -25,8 +28,6 @@ class QuotaWindow(Gtk.Window):
         self.usage_updater = Usage(self)
         self.usage_updater.start()
 
-    def cb_show(self, w, data):
-        """On show."""
         # create tree view
         self.tree_view = Gtk.TreeView(self.create_model())
         self.tree_view.set_rules_hint(True)
@@ -34,12 +35,22 @@ class QuotaWindow(Gtk.Window):
         self.create_columns(self.tree_view)
 
         # create a grid and attach the treeview to it
-        grid = Gtk.Grid()
-        grid.attach(self.tree_view, 0, 0, 1, 1)
+        self.grid = Gtk.Grid()
+        self.grid.attach(self.tree_view, 0, 0, 1, 1)
 
         # attach grid to window
-        self.add(grid)
+        self.add(self.grid)
+
+    def cb_show(self, w, data):
+        """On show."""
+        self.tree_view.set_model(self.create_model())
         self.show_all()
+
+        return True
+
+    def close_window(self, arg1, arg2):
+        self.hide()
+        return True
 
     def create_columns(self, tree_view):
         """Create the columns of the TreeView."""
@@ -58,7 +69,7 @@ class QuotaWindow(Gtk.Window):
         store = Gtk.ListStore(str, str)
 
         if(len(self.usage) == 0):
-            store.append(['loading ...', ''])
+            store.append(['loading', '...'])
             return store
 
         for file in self.usage:
@@ -78,7 +89,7 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            out = sys_call('du  ~/.')
+            out = sys_call('du  --all ~/.')
             lines = out.splitlines()
 
             lines.sort(key=lambda x: x[0])
