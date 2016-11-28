@@ -77,11 +77,14 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            proc = sp.Popen('du  ~/. | sort -n', stdout=sp.PIPE, shell=True)
+            proc = sp.Popen('du  ~/Documents/Projects/gnome-quota-indicator', stdout=sp.PIPE, shell=True)
             out = proc.communicate()
             out = out[0].decode('utf-8')
             lines = out.splitlines()
+
+            lines.sort(key=lambda x: x[0])
             lines.reverse()
+            lines = lines[:20]
 
             self.window.usage = []
             for line in lines:
