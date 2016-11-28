@@ -71,7 +71,7 @@ class QuotaIndicator():
 
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""
-        out = sys_call(['quota'])
+        out = sys_call('quota')
 
         try:
             lines = out.splitlines()

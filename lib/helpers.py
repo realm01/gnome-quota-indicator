@@ -15,15 +15,18 @@ def load_config():
         config['fs'] = []
 
     if use_etc_exports is not None and use_etc_exports is True:
-        with open('/etc/exports') as efile:
-            line = efile.readline()
-            while line:
-                if line.strip()[0] == '#':
-                    line = efile.readline()
-                    continue
-
-                config['fs'].append(line.strip().split()[0])
+        try:
+            with open('/etc/exports') as efile:
                 line = efile.readline()
+                while line:
+                    if line.strip()[0] == '#':
+                        line = efile.readline()
+                        continue
+
+                    config['fs'].append(line.strip().split()[0])
+                    line = efile.readline()
+        except:
+            print('/etc/exports not found.')
 
     return config
 

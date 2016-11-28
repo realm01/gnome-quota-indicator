@@ -91,17 +91,15 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            out = sys_call('du  --all ~/.')
+            out = sys_call('du  --all ~/. | sort -n')
             lines = out.splitlines()
-
-            lines.sort(key=lambda x: x[0])
             lines.reverse()
-            lines = lines[:20]
+            lines = lines[1:20]
 
             self.window.usage = []
             for line in lines:
                 ll = line.split()
-                ll[0] = "{0:.4f}".format(float(line[0])/1024) + 'MB'
+                ll[0] = "{0:.4f}".format(float(ll[0])/1024) + 'MB'
 
                 self.window.usage.append(ll)
 
