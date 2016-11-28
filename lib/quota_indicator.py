@@ -73,18 +73,22 @@ class QuotaIndicator():
         """Retrieve quota of current user and update quota label."""
         out = sys_call(['quota'])
 
-        lines = out.splitlines()
-        quota_a = lines[len(lines) - 1]
-        quota_a = quota_a.split()
+        try:
+            lines = out.splitlines()
+            quota_a = lines[len(lines) - 1]
+            quota_a = quota_a.split()
 
-        curr = float(quota_a[0])
-        hard = float(quota_a[2])
+            curr = float(quota_a[0])
+            hard = float(quota_a[2])
 
-        curr = curr / 1024
-        hard = hard / 1024
+            curr = curr / 1024
+            hard = hard / 1024
 
-        self.menu_items['quota'].label.set_text('Quota ' + str(int(curr)) + '/' + str(int(hard)) + ' MB')
-        self.menu_items['quota'].progressbar.set_fraction(curr / hard)
+            self.menu_items['quota'].label.set_text('Quota ' + str(int(curr)) + '/' + str(int(hard)) + ' MB')
+            self.menu_items['quota'].progressbar.set_fraction(curr / hard)
+        except:
+            self.menu_items['quota'].label.set_text('No Quota')
+            self.menu_items['quota'].progressbar.set_fraction(0.0)
 
     def update_fs(self):
         """Execute df filter specified fs and update labels."""
