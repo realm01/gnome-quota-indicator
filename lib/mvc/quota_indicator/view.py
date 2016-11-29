@@ -75,20 +75,20 @@ class QuotaIndicatorView():
     def update_quota(self):
         """Update quota event."""
         if self.upd_quota is not None:
-            r = self.upd_quota()
+            self.upd_quota()
 
-            self.menu_items['quota'].label.set_text(r.get('label'))
-            self.menu_items['quota'].progressbar.set_fraction(r.get('progress_fraction'))
-            self.ind.set_icon(get_path(r.get('icon')))
+            self.menu_items['quota'].label.set_text(self.model.quota.get('label'))
+            self.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
+            self.ind.set_icon(get_path(self.model.quota.get('icon')))
 
         return True
 
     def update_fs(self):
         """Update fs event."""
         if self.upd_fs is not None:
-            r = self.upd_fs()
+            self.upd_fs()
 
-            for ret in r:
+            for ret in self.model.fs:
                 self.menu_items[ret.get('fs')].label.set_text(ret.get('label'))
                 self.menu_items[ret.get('fs')].progressbar.set_fraction(ret.get('progress_fraction'))
 

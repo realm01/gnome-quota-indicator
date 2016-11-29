@@ -18,4 +18,6 @@ class QuotaIndicatorModel():
     def __init__(self):
         """Ctor of QuotaIndicatorModel."""
         self.menu_items = {}
+        self.quota = {}
+        self.fs = []
         self.config = load_config()

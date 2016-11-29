@@ -30,10 +30,10 @@ class Usage(Thread):
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         while(True):
-            out = sys_call('du  --all ~/. | sort -n')
+            out = sys_call('du  --all ~/. | sort -n | tail -n 21')
             lines = out.splitlines()
             lines.reverse()
-            lines = lines[1:20]
+            lines = lines[1:]
 
             self.model.usage = []
             for line in lines:

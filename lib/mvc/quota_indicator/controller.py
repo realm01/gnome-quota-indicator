@@ -49,7 +49,7 @@ class QuotaIndicatorController():
                 'icon': '../img/icon_normal.png'
             }
 
-        return ret
+        self.model.quota = ret
 
     def update_fs(self):
         """Execute df filter specified fs and update labels."""
@@ -80,4 +80,4 @@ class QuotaIndicatorController():
                 'progress_fraction': used / size
             })
 
-        return r
+        self.model.fs = r
