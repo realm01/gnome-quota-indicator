@@ -3,7 +3,6 @@
 from lib.mvc.quota_window.model import QuotaWindowModel
 from lib.mvc.quota_window.view import QuotaWindowView
 from threading import Thread
-from time import sleep
 from lib.helpers import sys_call
 from lib.mvc.bases import ControllerBase
 

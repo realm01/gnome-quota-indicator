@@ -4,8 +4,6 @@ from gi.repository import Gtk
 from lib.helpers import get_path
 from lib.mvc.bases import ViewBase
 
-from time import sleep
-
 
 class QuotaWindowView(Gtk.Window, ViewBase):
     """View of QuotaWindowView."""
