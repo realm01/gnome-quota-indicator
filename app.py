@@ -3,6 +3,11 @@
 """GNOME task bar indicator which shows the user quota of the
 currently logged in user"""
 
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import gi
 
 gi.require_version('Gtk', '3.0')
