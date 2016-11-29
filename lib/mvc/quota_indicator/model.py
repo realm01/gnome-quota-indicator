@@ -7,11 +7,10 @@ from lib.mvc.bases import ModelBase
 class MenuItem():
     """Represents a menu item, stores progressbar and label."""
 
-    def __init__(self, progressbar, label, precent):
+    def __init__(self, progressbar, label):
         """Ctor of MenuItem."""
         self.progressbar = progressbar
         self.label = label
-        self.label_precent = precent
 
 
 class QuotaIndicatorModel(ModelBase):

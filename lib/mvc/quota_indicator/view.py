@@ -27,9 +27,9 @@ class QuotaIndicatorView(ViewBase):
         self.menu_items = {}
         self.menu = Gtk.Menu()
 
-        self.create_menu_item('quota', self.menu, ' Quota 0/0 MB', ' | 0%', self.app.quota_window.view.cb_show)
+        self.create_menu_item('quota', self.menu, ' Quota 0/0 MB | 0%', self.app.quota_window.view.cb_show)
         for fs in self.model.config['fs']:
-            self.create_menu_item(fs, self.menu, ' FS 0/0 MB', ' | 0%')
+            self.create_menu_item(fs, self.menu, ' FS 0/0 MB | 0%')
 
         # show the menu
         self.menu.show_all()
@@ -41,12 +41,12 @@ class QuotaIndicatorView(ViewBase):
         # refresh fs stats
         GLib.timeout_add(1000, self.update_fs)
 
-    def create_menu_item(self, name, menu, label_text, label_precent, on_show=None):
+    def create_menu_item(self, name, menu, label_text, on_show=None):
         """Create a menu item and appends it to the menu."""
         item = Gtk.MenuItem()
         grid = Gtk.Grid()
 
-        menu_item = MenuItem(Gtk.ProgressBar(), Gtk.Label(label_text), Gtk.Label(label_precent))
+        menu_item = MenuItem(Gtk.ProgressBar(), Gtk.Label(label_text))
 
         # progression bar
         menu_item.progressbar.pulse()
@@ -55,7 +55,6 @@ class QuotaIndicatorView(ViewBase):
         # add items to grid
         grid.add(menu_item.progressbar)
         grid.attach(menu_item.label, 1, 0, 1, 1)
-        grid.attach(menu_item.label_precent, 2, 0, 1, 1)
 
         # add click event to menu item
         if(on_show is not None):
@@ -79,8 +78,7 @@ class QuotaIndicatorView(ViewBase):
         if self.upd_quota is not None:
             self.upd_quota()
 
-            self.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label'))
-            self.menu_items['quota'].label_precent.set_text(' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
+            self.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
             self.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
             self.ind.set_icon(get_path(self.model.quota.get('icon')))
 
@@ -92,8 +90,7 @@ class QuotaIndicatorView(ViewBase):
             self.upd_fs()
 
             for ret in self.model.fs:
-                self.menu_items[ret.get('fs')].label.set_text(' ' + ret.get('label'))
-                self.menu_items[ret.get('fs')].label_precent.set_text(' | ' + str(int(ret.get('progress_fraction') * 100)) + '%')
+                self.menu_items[ret.get('fs')].label.set_text(' ' + ret.get('label') + ' | ' + str(int(ret.get('progress_fraction') * 100)) + '%')
                 self.menu_items[ret.get('fs')].progressbar.set_fraction(ret.get('progress_fraction'))
 
         return True
