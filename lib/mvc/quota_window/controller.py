@@ -5,15 +5,15 @@ from lib.mvc.quota_window.view import QuotaWindowView
 from threading import Thread
 from time import sleep
 from lib.helpers import sys_call
+from lib.mvc.bases import ControllerBase
 
 
-class QuotaWindowController():
+class QuotaWindowController(ControllerBase):
     """Controller of Quota Window."""
 
     def __init__(self, app):
         """Ctor of QuotaWindowController."""
-        self.model = QuotaWindowModel()
-        self.view = QuotaWindowView(app, self.model)
+        super().__init__(app, QuotaWindowModel, QuotaWindowView)
 
         self.usage = Usage(self.model)
         self.usage.start()

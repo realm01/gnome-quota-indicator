@@ -3,15 +3,15 @@
 from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path
+from lib.mvc.bases import ControllerBase
 
 
-class QuotaIndicatorController():
+class QuotaIndicatorController(ControllerBase):
     """Controller of Quota Indicator."""
 
     def __init__(self, app):
         """Ctor of QuotaIndicatorController."""
-        self.model = QuotaIndicatorModel()
-        self.view = QuotaIndicatorView(app, self.model)
+        super().__init__(app, QuotaIndicatorModel, QuotaIndicatorView)
 
         self.view.register_update_quota(self.update_quota)
         self.view.register_update_fs(self.update_fs)

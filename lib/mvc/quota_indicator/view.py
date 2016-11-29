@@ -4,15 +4,16 @@ from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
 from lib.helpers import get_path
 from lib.mvc.quota_indicator.model import MenuItem
+from lib.mvc.bases import ViewBase
 
 
-class QuotaIndicatorView():
+class QuotaIndicatorView(ViewBase):
     """View of Quota Indicator."""
 
     def __init__(self, app, model):
         """Ctor of QuotaIndicatorView."""
-        self.app = app
-        self.model = model
+
+        super().__init__(app, model)
 
         self.upd_quota = None
         self.upd_fs = None

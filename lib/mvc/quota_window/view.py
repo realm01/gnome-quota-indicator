@@ -2,17 +2,16 @@
 
 from gi.repository import Gtk
 from lib.helpers import get_path
+from lib.mvc.bases import ViewBase
 
 
-class QuotaWindowView(Gtk.Window):
+class QuotaWindowView(Gtk.Window, ViewBase):
     """View of QuotaWindowView."""
 
     def __init__(self, app, model):
         """Ctor of QuotaWindowView."""
+        ViewBase.__init__(self, app, model)
         Gtk.Window.__init__(self)
-
-        self.app = app
-        self.model = model
 
         self.connect("delete-event", self.cb_close)
 
