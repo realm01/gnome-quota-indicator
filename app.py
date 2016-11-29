@@ -3,6 +3,11 @@
 """GNOME task bar indicator which shows the user quota of the
 currently logged in user"""
 
+import gi.repository
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
+
 from gi.repository import Gtk
 from lib.mvc.quota_indicator.controller import QuotaIndicatorController
 from lib.mvc.quota_window.controller import QuotaWindowController
