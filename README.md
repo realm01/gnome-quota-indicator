@@ -2,6 +2,8 @@ Gnome Quota Indicator
 ---------------------
 This is a small app which shows the current quota usage of the logged on user as well as some stats of specified filesystems.
 
+NOTE: only python3 and GTK 3.0+ is supported
+
 ### Config
 ```sh
 ---
@@ -13,6 +15,11 @@ fs:
   - /ashscr1
   - /ashscr2
 ```
+
+### Technology Stack
+ - python3
+ - Gtk 3.0
+
 
 License
 -------
