@@ -14,6 +14,11 @@ use_etc_exports: True|False
 fs:
   - /ashscr1
   - /ashscr2
+
+# when should the icon change color?
+  notify_levels:
+    warning: 0.8
+    critical: 0.9
 ```
 
 ### Technology Stack

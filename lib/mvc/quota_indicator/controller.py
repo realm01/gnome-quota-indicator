@@ -36,10 +36,24 @@ class QuotaIndicatorController(ControllerBase):
                 'progress_fraction': curr / hard
             }
 
-            if curr / hard >= 0.9:
+            warning_level = self.model.config.get('notify_levels')
+            if warning_level is not None:
+                warning_level = warning_level.get('warning')
+
+            if warning_level is None:
+                warning_level = 0.8
+
+            critical_level = self.model.config.get('notify_levels')
+            if critical_level is not None:
+                critical_level = critical_level.get('critical')
+
+            if critical_level is None:
+                critical_level = 0.9
+
+            if curr / hard >= warning_level:
                 ret['icon'] = '../img/icon_warning.png'
 
-            if curr / hard >= 9.9:
+            if curr / hard >= critical_level:
                 ret['icon'] = '../img/icon_critical.png'
 
         except:
