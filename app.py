@@ -3,7 +3,7 @@
 """GNOME task bar indicator which shows the user quota of the
 currently logged in user"""
 
-import gi.repository
+import gi
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
