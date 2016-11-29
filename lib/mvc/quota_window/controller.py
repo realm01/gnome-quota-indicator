@@ -15,31 +15,40 @@ class QuotaWindowController(ControllerBase):
         """Ctor of QuotaWindowController."""
         super().__init__(app, QuotaWindowModel, QuotaWindowView)
 
-        self.usage = Usage(self.model)
+        self.view.register_on_open(self.on_open)
+        self.view.register_on_close(self.on_close)
+
+    def on_open(self):
+        """On open event."""
+        self.usage = Usage(self.model, self.view.on_update)
         self.usage.start()
+
+    def on_close(self):
+        """On close event."""
+        pass
 
 
 class Usage(Thread):
     """Thread which runs du and updates QuotaWindow."""
 
-    def __init__(self, model):
+    def __init__(self, model, on_update):
         """Ctor of Usage."""
         super().__init__()
         self.model = model
+        self.on_update = on_update
 
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
-        while(True):
-            out = sys_call('du  --all ~/. | sort -n | tail -n 21')
-            lines = out.splitlines()
-            lines.reverse()
-            lines = lines[1:]
+        out = sys_call('du  --all ~/. | sort -n | tail -n 21')
+        lines = out.splitlines()
+        lines.reverse()
+        lines = lines[1:]
 
-            self.model.usage = []
-            for line in lines:
-                ll = line.split()
-                ll[0] = "{0:.4f}".format(float(ll[0])/1024) + 'MB'
+        self.model.usage = []
+        for line in lines:
+            ll = line.split()
+            ll[0] = "{0:.4f}".format(float(ll[0])/1024) + 'MB'
 
-                self.model.usage.append(ll)
+            self.model.usage.append(ll)
 
-            sleep(10 * 60)
+        self.on_update()

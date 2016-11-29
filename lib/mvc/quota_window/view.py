@@ -15,6 +15,9 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         ViewBase.__init__(self, app, model)
         Gtk.Window.__init__(self)
 
+        self.on_open = None
+        self.on_close = None
+
         self.connect("delete-event", self.cb_close)
 
         self.set_title(self.app.name)
@@ -36,14 +39,32 @@ class QuotaWindowView(Gtk.Window, ViewBase):
 
     def cb_show(self, w, data):
         """On show."""
+        if self.on_open is not None:
+            self.on_open()
+
         self.tree_view.set_model(self.model.create_model())
         self.show_all()
         return True
 
     def cb_close(self, w, data):
         """"On window close."""
+        if self.on_close is not None:
+            self.on_close()
+
         self.hide()
         return True
+
+    def on_update(self):
+        """On update."""
+        self.tree_view.set_model(self.model.create_model())
+
+    def register_on_open(self, func):
+        """Register on open event."""
+        self.on_open = func
+
+    def register_on_close(self, func):
+        """Register on close event."""
+        self.on_close = func
 
     def create_columns(self, tree_view):
         """Create the columns of the TreeView."""
