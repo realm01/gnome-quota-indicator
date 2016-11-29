@@ -4,6 +4,8 @@ from gi.repository import Gtk
 from lib.helpers import get_path
 from lib.mvc.bases import ViewBase
 
+from time import sleep
+
 
 class QuotaWindowView(Gtk.Window, ViewBase):
     """View of QuotaWindowView."""
@@ -22,7 +24,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
 
         # create tree view
         self.tree_view = Gtk.TreeView(self.model.create_model())
-        self.tree_view.set_rules_hint(True)
+        self.tree_view.connect("row-activated", self.on_activated)
 
         self.create_columns(self.tree_view)
 
@@ -33,11 +35,14 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         # attach grid to window
         self.add(self.grid)
 
+    def on_activated(self, w, data):
+        """On tree view row-activated."""
+        self.tree_view.set_model(self.model.create_model())
+        return True
+
     def cb_show(self, w, data):
         """On show."""
-        self.tree_view.set_model(self.model.create_model())
         self.show_all()
-
         return True
 
     def cb_close(self, w, data):
