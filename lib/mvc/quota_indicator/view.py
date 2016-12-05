@@ -54,7 +54,7 @@ class QuotaIndicatorView(ViewBase):
 
     def create_menu_item(self, name, menu, label_text, on_show=None):
         """Create a menu item and appends it to the menu."""
-        if name in menu:
+        if name in self.model.menu_items.keys():
             return
 
         if not name == 'quota' and not self.validate_fs(name):
