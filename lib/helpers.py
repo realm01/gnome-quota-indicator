@@ -42,4 +42,7 @@ def sys_call(cmd):
 
 def get_path(file):
     """Build absolute path for __file___ and append filename."""
+    if file is None:
+        file = ''
+
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
