@@ -27,6 +27,7 @@ class QuotaIndicatorView(ViewBase):
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
     def initialize(self):
+        """Create the actual view with all widgets."""
         self.model.menu_items = {}
         self.menu = Gtk.Menu()
 
@@ -91,9 +92,11 @@ class QuotaIndicatorView(ViewBase):
         self.upd_fs = func
 
     def register_quit(self, func):
+        """Register quit event."""
         self.quit_event = func
 
     def register_validate_fs(self, func):
+        """Register validate fs event."""
         self.validate_fs = func
 
     def update_quota(self):

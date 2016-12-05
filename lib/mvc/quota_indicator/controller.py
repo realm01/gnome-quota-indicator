@@ -24,12 +24,15 @@ class QuotaIndicatorController(ControllerBase):
         self.view.initialize()
 
     def register_quit(self, func):
+        """Register quit event."""
         self.quit_event = func
 
     def quit(self, *args):
+        """Quit event."""
         self.quit_event()
 
     def validate_fs(self, name):
+        """Check if a given path is in df."""
         out = sys_call('df -h | grep ' + name)
         return not out.strip() == ''
 

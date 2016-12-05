@@ -32,6 +32,7 @@ class QuotaWindowController(ControllerBase):
         pass
 
     def cleanup_thread(self):
+        """Unset the thread variable."""
         self.usage = None
 
 
