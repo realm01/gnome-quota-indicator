@@ -36,8 +36,8 @@ class App(Gtk.Application):
 
 
 if __name__ == '__main__':
-    if(os.fork()):
-        os._exit(0)
+    # if(os.fork()):
+    #     os._exit(0)
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = App('Quota Indicator')
