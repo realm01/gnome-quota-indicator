@@ -17,6 +17,8 @@ class QuotaWindowController(ControllerBase):
         self.view.register_on_open(self.on_open)
         self.view.register_on_close(self.on_close)
 
+        self.view.initialize()
+
     def on_open(self):
         """On open event."""
         self.usage = Usage(self.model, self.view.on_update)

@@ -17,9 +17,16 @@ class QuotaIndicatorController(ControllerBase):
         self.view.register_update_quota(self.update_quota)
         self.view.register_update_fs(self.update_fs)
         self.view.register_quit(self.quit_application)
+        self.view.register_validate_fs(self.validate_fs)
+
+        self.view.initialize()
 
     def quit_application(self, *args):
         sys.exit()
+
+    def validate_fs(self, name):
+        out = sys_call('df -h | grep ' + name)
+        return not out.strip() == ''
 
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""
@@ -73,7 +80,7 @@ class QuotaIndicatorController(ControllerBase):
     def update_fs(self):
         """Execute df filter specified fs and update labels."""
         r = []
-        for fs in self.model.config['fs']:
+        for fs in self.model.menu_items.keys():
             out = sys_call('df | grep ' + fs)
             ll = out.split()
 

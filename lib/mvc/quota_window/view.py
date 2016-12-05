@@ -16,6 +16,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         self.on_open = None
         self.on_close = None
 
+    def initialize(self):
         self.connect("delete-event", self.cb_close)
 
         self.set_title(self.app.name)

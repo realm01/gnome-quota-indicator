@@ -18,6 +18,7 @@ class QuotaIndicatorView(ViewBase):
         self.upd_quota = None
         self.upd_fs = None
         self.quit_event = None
+        self.validate_fs = None
 
         self.ind = AppIndicator.Indicator.new(
             self.app.name,
@@ -25,7 +26,8 @@ class QuotaIndicatorView(ViewBase):
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
-        self.menu_items = {}
+    def initialize(self):
+        self.model.menu_items = {}
         self.menu = Gtk.Menu()
 
         self.create_menu_item('quota', self.menu, ' Quota 0/0 MB | 0%', self.app.quota_window.view.cb_show)
@@ -33,11 +35,12 @@ class QuotaIndicatorView(ViewBase):
             self.create_menu_item(fs, self.menu, ' FS 0/0 MB | 0%')
 
         # quit button
-        self.quit_item = Gtk.MenuItem()
+        item = Gtk.MenuItem()
         label = Gtk.Label('Quit')
         label.set_alignment(0.0, 0.0)
-        self.quit_item.add(label)
-        self.menu.append(self.quit_item)
+        item.connect("activate", self.quit_event, '')
+        item.add(label)
+        self.menu.append(item)
 
         # show the menu
         self.menu.show_all()
@@ -51,6 +54,12 @@ class QuotaIndicatorView(ViewBase):
 
     def create_menu_item(self, name, menu, label_text, on_show=None):
         """Create a menu item and appends it to the menu."""
+        if name in menu:
+            return
+
+        if not name == 'quota' and not self.validate_fs(name):
+            return
+
         item = Gtk.MenuItem()
         grid = Gtk.Grid()
 
@@ -70,7 +79,7 @@ class QuotaIndicatorView(ViewBase):
 
         item.add(grid)
 
-        self.menu_items[name] = menu_item
+        self.model.menu_items[name] = menu_item
         self.menu.append(item)
 
     def register_update_quota(self, func):
@@ -83,15 +92,17 @@ class QuotaIndicatorView(ViewBase):
 
     def register_quit(self, func):
         self.quit_event = func
-        self.quit_item.connect("activate", self.quit_event, '')
+
+    def register_validate_fs(self, func):
+        self.validate_fs = func
 
     def update_quota(self):
         """Update quota event."""
         if self.upd_quota is not None:
             self.upd_quota()
 
-            self.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
-            self.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
+            self.model.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
+            self.model.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
             self.ind.set_icon(get_path(self.model.quota.get('icon')))
 
         return True
@@ -102,7 +113,7 @@ class QuotaIndicatorView(ViewBase):
             self.upd_fs()
 
             for ret in self.model.fs:
-                self.menu_items[ret.get('fs')].label.set_text(' ' + ret.get('label') + ' | ' + str(int(ret.get('progress_fraction') * 100)) + '%')
-                self.menu_items[ret.get('fs')].progressbar.set_fraction(ret.get('progress_fraction'))
+                self.model.menu_items[ret.get('fs')].label.set_text(' ' + ret.get('label') + ' | ' + str(int(ret.get('progress_fraction') * 100)) + '%')
+                self.model.menu_items[ret.get('fs')].progressbar.set_fraction(ret.get('progress_fraction'))
 
         return True
