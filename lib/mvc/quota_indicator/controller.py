@@ -1,5 +1,6 @@
 """Controller of Quota Indicator."""
 
+import sys
 from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path
@@ -15,6 +16,10 @@ class QuotaIndicatorController(ControllerBase):
 
         self.view.register_update_quota(self.update_quota)
         self.view.register_update_fs(self.update_fs)
+        self.view.register_quit(self.quit_application)
+
+    def quit_application(self, *args):
+        sys.exit()
 
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""

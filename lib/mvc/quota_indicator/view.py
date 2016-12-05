@@ -17,6 +17,7 @@ class QuotaIndicatorView(ViewBase):
 
         self.upd_quota = None
         self.upd_fs = None
+        self.quit_event = None
 
         self.ind = AppIndicator.Indicator.new(
             self.app.name,
@@ -30,6 +31,13 @@ class QuotaIndicatorView(ViewBase):
         self.create_menu_item('quota', self.menu, ' Quota 0/0 MB | 0%', self.app.quota_window.view.cb_show)
         for fs in self.model.config['fs']:
             self.create_menu_item(fs, self.menu, ' FS 0/0 MB | 0%')
+
+        # quit button
+        self.quit_item = Gtk.MenuItem()
+        label = Gtk.Label('Quit')
+        label.set_alignment(0.0, 0.0)
+        self.quit_item.add(label)
+        self.menu.append(self.quit_item)
 
         # show the menu
         self.menu.show_all()
@@ -72,6 +80,10 @@ class QuotaIndicatorView(ViewBase):
     def register_update_fs(self, func):
         """Register update fs event."""
         self.upd_fs = func
+
+    def register_quit(self, func):
+        self.quit_event = func
+        self.quit_item.connect("activate", self.quit_event, '')
 
     def update_quota(self):
         """Update quota event."""
