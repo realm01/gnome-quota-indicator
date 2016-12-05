@@ -15,6 +15,7 @@ class QuotaWindowController(ControllerBase):
         super().__init__(app, QuotaWindowModel, QuotaWindowView)
 
         self.usage = None
+        self.is_running = False
 
         self.view.register_on_open(self.on_open)
         self.view.register_on_close(self.on_close)
@@ -23,7 +24,8 @@ class QuotaWindowController(ControllerBase):
 
     def on_open(self):
         """On open event."""
-        if self.usage is None:
+        if not self.is_running:
+            self.is_running = True
             self.usage = Usage(self.model, self.view.on_update, self.cleanup_thread)
             self.usage.start()
 
@@ -32,8 +34,8 @@ class QuotaWindowController(ControllerBase):
         pass
 
     def cleanup_thread(self):
-        """Unset the thread variable."""
-        self.usage = None
+        """Set is running thread indicator to false."""
+        self.is_running = False
 
 
 class Usage(Thread):
