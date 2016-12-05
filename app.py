@@ -30,9 +30,14 @@ class App(Gtk.Application):
         self.quota_window = QuotaWindowController(self)
         self.indicator = QuotaIndicatorController(self)
 
+        self.indicator.register_quit(self.quit)
+
     def run(self):
         """Run app."""
         Gtk.main()
+
+    def quit(self):
+        sys.exit(0)
 
 
 if __name__ == '__main__':

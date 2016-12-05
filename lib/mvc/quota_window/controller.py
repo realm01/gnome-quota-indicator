@@ -14,6 +14,8 @@ class QuotaWindowController(ControllerBase):
         """Ctor of QuotaWindowController."""
         super().__init__(app, QuotaWindowModel, QuotaWindowView)
 
+        self.usage = None
+
         self.view.register_on_open(self.on_open)
         self.view.register_on_close(self.on_close)
 
@@ -21,22 +23,28 @@ class QuotaWindowController(ControllerBase):
 
     def on_open(self):
         """On open event."""
-        self.usage = Usage(self.model, self.view.on_update)
-        self.usage.start()
+        if self.usage is None:
+            self.usage = Usage(self.model, self.view.on_update, self.cleanup_thread)
+            self.usage.start()
 
     def on_close(self):
         """On close event."""
         pass
 
+    def cleanup_thread(self):
+        self.usage = None
+
 
 class Usage(Thread):
     """Thread which runs du and updates QuotaWindow."""
 
-    def __init__(self, model, on_update):
+    def __init__(self, model, on_update, cleanup):
         """Ctor of Usage."""
         super().__init__()
+        self.daemon = True
         self.model = model
         self.on_update = on_update
+        self.cleanup = cleanup
 
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
@@ -53,3 +61,4 @@ class Usage(Thread):
             self.model.usage.append(ll)
 
         self.on_update()
+        self.cleanup()

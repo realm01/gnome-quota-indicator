@@ -14,15 +14,20 @@ class QuotaIndicatorController(ControllerBase):
         """Ctor of QuotaIndicatorController."""
         super().__init__(app, QuotaIndicatorModel, QuotaIndicatorView)
 
+        self.quit_event = None
+
         self.view.register_update_quota(self.update_quota)
         self.view.register_update_fs(self.update_fs)
-        self.view.register_quit(self.quit_application)
+        self.view.register_quit(self.quit)
         self.view.register_validate_fs(self.validate_fs)
 
         self.view.initialize()
 
-    def quit_application(self, *args):
-        sys.exit()
+    def register_quit(self, func):
+        self.quit_event = func
+
+    def quit(self, *args):
+        self.quit_event()
 
     def validate_fs(self, name):
         out = sys_call('df -h | grep ' + name)
