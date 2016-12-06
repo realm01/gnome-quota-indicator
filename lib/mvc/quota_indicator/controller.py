@@ -70,11 +70,12 @@ class QuotaIndicatorController(ControllerBase):
             if critical_level is None:
                 critical_level = 0.9
 
-            if curr / hard >= warning_level:
-                ret['icon'] = '../img/icon_warning.png'
-
             if curr / hard >= critical_level:
                 ret['icon'] = '../img/icon_critical.png'
+            elif curr / hard >= warning_level:
+                ret['icon'] = '../img/icon_warning.png'
+            else:
+                ret['icon'] = '../img/icon_normal.png'
 
         except:
             ret = {
