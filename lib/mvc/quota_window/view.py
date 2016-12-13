@@ -23,7 +23,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         self.set_title(self.app.name)
         self.set_resizable(False)
         self.resize(200, 400)
-        self.set_icon_from_file(get_path('../img/icon_normal.png'))
+        self.set_icon_from_file(get_path('../img/icon_default.png'))
 
         # create tree view
         self.tree_view = Gtk.TreeView(self.model.create_model())

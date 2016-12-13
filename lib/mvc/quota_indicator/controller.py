@@ -1,11 +1,16 @@
 """Controller of Quota Indicator."""
 
 import sys
+import  os
 from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path
 from lib.mvc.bases import ControllerBase
 
+from PIL import Image, ImageDraw, ImageOps
+
+def getuid():
+    return str(os.getuid())
 
 class QuotaIndicatorController(ControllerBase):
     """Controller of Quota Indicator."""
@@ -35,6 +40,40 @@ class QuotaIndicatorController(ControllerBase):
         """Check if a given path is in df."""
         out = sys_call('df -h | grep ' + name)
         return not out.strip() == ''
+
+    def generateIcon(self, precentage, color):
+        icon = Image.open(get_path("../img/icon_default.png"))
+        img = Image.new('RGBA', icon.size)
+
+        draw = ImageDraw.Draw(img)
+
+        x = img.size[0]
+        y = img.size[1]
+        r = x / 4
+
+        x_offset = -1
+        y_offset = 7
+
+        draw.pieslice(
+            (
+                x/2 + x_offset - r,
+                y/2 + y_offset - r,
+                x/2 + r + x_offset,
+                y/2 + r + y_offset
+            ),
+            -90,
+            (360 * precentage) -90,
+            fill=color,
+            outline=(0, 0, 0))
+
+        del draw
+
+        new_img = Image.alpha_composite(img, icon)
+        new_img.save('/tmp/' + getuid() + '_compiled.png', 'PNG')
+
+        icon.close()
+        img.close()
+        new_img.close()
 
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""
@@ -71,17 +110,20 @@ class QuotaIndicatorController(ControllerBase):
                 critical_level = 0.9
 
             if curr / hard >= critical_level:
-                ret['icon'] = '../img/icon_critical.png'
+                color = (244, 67, 54)
             elif curr / hard >= warning_level:
-                ret['icon'] = '../img/icon_warning.png'
+                color = (255, 235, 59)
             else:
-                ret['icon'] = '../img/icon_normal.png'
+                color = (76, 175, 80)
 
+            self.generateIcon(curr / hard, color)
+
+            ret['icon'] = '/tmp/' + getuid() + '_compiled.png'
         except:
             ret = {
                 'label': 'No Quota',
                 'progress_fraction': 0.0,
-                'icon': '../img/icon_normal.png'
+                'icon': '../img/icon_default.png'
             }
 
         self.model.quota = ret

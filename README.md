@@ -25,6 +25,10 @@ fs:
  - python3
  - Gtk 3.0
 
+### Depenedencies
+```sh
+$ aptitude install python3-yaml python3-pil
+```
 
 License
 -------

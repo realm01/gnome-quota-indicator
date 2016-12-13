@@ -22,7 +22,7 @@ class QuotaIndicatorView(ViewBase):
 
         self.ind = AppIndicator.Indicator.new(
             self.app.name,
-            get_path('../img/icon_normal.png'),
+            get_path('../img/icon_default.png'),
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
@@ -106,7 +106,11 @@ class QuotaIndicatorView(ViewBase):
 
             self.model.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
             self.model.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
-            self.ind.set_icon(get_path(self.model.quota.get('icon')))
+            icon_path = self.model.quota.get('icon')
+            if icon_path[0] != '/':
+                icon_path = get_path(icon_path)
+
+            self.ind.set_icon(icon_path)
 
         return True
 
