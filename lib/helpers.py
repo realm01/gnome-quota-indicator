@@ -5,6 +5,11 @@ import os
 import yaml
 
 
+def getuid():
+    """Same as os.getuid() but returns a str."""
+    return str(os.getuid())
+
+
 def load_config():
     """"Load configuration format it and return it."""
     with open(get_path('../app.conf')) as file:

@@ -1,8 +1,10 @@
 """View of QuotaWindowView."""
 
 from gi.repository import Gtk
-from lib.helpers import get_path
+from lib.helpers import get_path, getuid
 from lib.mvc.bases import ViewBase
+
+import os
 
 
 class QuotaWindowView(Gtk.Window, ViewBase):
@@ -23,7 +25,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         self.set_title(self.app.name)
         self.set_resizable(False)
         self.resize(200, 400)
-        self.set_icon_from_file(get_path('../img/icon_default.png'))
+        self.set_icon_from_file(self.getIcon())
 
         # create tree view
         self.tree_view = Gtk.TreeView(self.model.create_model())
@@ -37,8 +39,18 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         # attach grid to window
         self.add(self.grid)
 
+    def getIcon(self):
+        p = '/tmp/' + getuid() + '_compiled.png'
+
+        if not os.path.exists(p):
+            return get_path('../img/icon_default.png')
+        else:
+            return p
+
     def cb_show(self, w, data):
         """On show."""
+        self.set_icon_from_file(self.getIcon())
+
         if self.on_open is not None:
             self.on_open()
 

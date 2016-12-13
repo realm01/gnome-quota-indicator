@@ -1,16 +1,12 @@
 """Controller of Quota Indicator."""
 
 import sys
-import  os
 from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
-from lib.helpers import sys_call, get_path
+from lib.helpers import sys_call, get_path, getuid
 from lib.mvc.bases import ControllerBase
 
 from PIL import Image, ImageDraw, ImageOps
-
-def getuid():
-    return str(os.getuid())
 
 class QuotaIndicatorController(ControllerBase):
     """Controller of Quota Indicator."""
