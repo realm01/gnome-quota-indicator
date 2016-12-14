@@ -48,10 +48,13 @@ class QuotaIndicatorView(ViewBase):
         self.ind.set_menu(self.menu)
 
         # refresh quota
-        GLib.timeout_add(1000, self.update_quota)
+        GLib.timeout_add(self.model.config['refresh']['quota_rate'], self.update_quota)
 
         # refresh fs stats
-        GLib.timeout_add(1000, self.update_fs)
+        GLib.timeout_add(self.model.config['refresh']['fs_rate'], self.update_fs)
+
+        self.update_quota()
+        self.update_fs()
 
     def create_menu_item(self, name, menu, label_text, on_show=None):
         """Create a menu item and appends it to the menu."""

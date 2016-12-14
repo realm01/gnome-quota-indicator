@@ -33,6 +33,19 @@ def load_config():
         except:
             print('/etc/exports not found.')
 
+    if config.get('refresh') is None:
+        config['refresh'] = {}
+
+    if config['refresh'].get('quota_rate') is None:
+        config['refresh']['quota_rate'] = 15 * 1000 * 60
+    else:
+        config['refresh']['quota_rate'] *= 1000 * 60
+
+    if config['refresh'].get('fs_rate') is None:
+        config['refresh']['fs_rate'] = 15 * 1000 * 60
+    else:
+        config['refresh']['fs_rate'] *= 1000 * 60
+
     return config
 
 
