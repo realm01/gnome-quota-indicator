@@ -5,6 +5,7 @@ from gi.repository import AppIndicator3 as AppIndicator
 from lib.helpers import get_path
 from lib.mvc.quota_indicator.model import MenuItem
 from lib.mvc.bases import ViewBase
+from lib.exception_feedback import add_default_exception_handling
 
 
 class QuotaIndicatorView(ViewBase):
@@ -26,6 +27,7 @@ class QuotaIndicatorView(ViewBase):
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
+    @add_default_exception_handling('Failed to initialize Quota Indicator')
     def initialize(self):
         """Create the actual view with all widgets."""
         self.model.menu_items = {}
@@ -56,6 +58,7 @@ class QuotaIndicatorView(ViewBase):
         self.update_quota()
         self.update_fs()
 
+    @add_default_exception_handling('Failed to initialize Quota Indicator')
     def create_menu_item(self, name, menu, label_text, on_show=None):
         """Create a menu item and appends it to the menu."""
         if name in self.model.menu_items.keys():
@@ -86,22 +89,27 @@ class QuotaIndicatorView(ViewBase):
         self.model.menu_items[name] = menu_item
         self.menu.append(item)
 
+    @add_default_exception_handling()
     def register_update_quota(self, func):
         """Register update quota event."""
         self.upd_quota = func
 
+    @add_default_exception_handling()
     def register_update_fs(self, func):
         """Register update fs event."""
         self.upd_fs = func
 
+    @add_default_exception_handling()
     def register_quit(self, func):
         """Register quit event."""
         self.quit_event = func
 
+    @add_default_exception_handling()
     def register_validate_fs(self, func):
         """Register validate fs event."""
         self.validate_fs = func
 
+    @add_default_exception_handling('Failed to update quota indicator')
     def update_quota(self):
         """Update quota event."""
         if self.upd_quota is not None:
@@ -117,6 +125,7 @@ class QuotaIndicatorView(ViewBase):
 
         return True
 
+    @add_default_exception_handling('Failed to update quota indicator')
     def update_fs(self):
         """Update fs event."""
         if self.upd_fs is not None:

@@ -5,6 +5,7 @@ from lib.mvc.quota_indicator.model import QuotaIndicatorModel
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path, getuid
 from lib.mvc.bases import ControllerBase
+from lib.exception_feedback import add_default_exception_handling
 
 from PIL import Image, ImageDraw, ImageOps
 
@@ -37,6 +38,7 @@ class QuotaIndicatorController(ControllerBase):
         out = sys_call('df -h | grep ' + name)
         return not out.strip() == ''
 
+    @add_default_exception_handling('Failed to generate icon')
     def generateIcon(self, precentage, color):
         icon = Image.open(get_path("../img/icon_default.png"))
         img = Image.new('RGBA', icon.size)
@@ -71,6 +73,7 @@ class QuotaIndicatorController(ControllerBase):
         img.close()
         new_img.close()
 
+    @add_default_exception_handling('Failed to gather quota details')
     def update_quota(self):
         """Retrieve quota of current user and update quota label."""
         out = sys_call('quota')
@@ -124,6 +127,7 @@ class QuotaIndicatorController(ControllerBase):
 
         self.model.quota = ret
 
+    @add_default_exception_handling('Failed to gather filesystem details')
     def update_fs(self):
         """Execute df filter specified fs and update labels."""
         r = []
