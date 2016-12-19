@@ -64,3 +64,6 @@ def get_path(file):
         file = ''
 
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
+
+def show_cmd_error(msg, exception):
+    print('\033[31m{msg}:\033[30m {reason}'.format(msg=msg, reason=str(exception)))

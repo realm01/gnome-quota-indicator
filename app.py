@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from lib.mvc.quota_indicator.controller import QuotaIndicatorController
 from lib.mvc.quota_window.controller import QuotaWindowController
 import signal
+from lib.helpers import show_cmd_error
 
 
 class App(Gtk.Application):
@@ -46,5 +47,9 @@ if __name__ == '__main__':
     #     os._exit(0)
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = App('Quota Indicator')
+    try:
+        app = App('Quota Indicator')
+    except Exception as e:
+        show_cmd_error('Failed to initialize application', e)
+        sys.exit(0)
     app.run()
