@@ -5,6 +5,7 @@ from lib.mvc.quota_window.view import QuotaWindowView
 from threading import Thread
 from lib.helpers import sys_call
 from lib.mvc.bases import ControllerBase
+from lib.exception_feedback import add_default_exception_handling
 
 
 class QuotaWindowController(ControllerBase):
@@ -49,6 +50,7 @@ class Usage(Thread):
         self.on_update = on_update
         self.cleanup = cleanup
 
+    @add_default_exception_handling('Failed to get storage usage')
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
         out = sys_call('du  --all ~/. | sort -n | tail -n 21')
