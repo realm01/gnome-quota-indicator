@@ -37,6 +37,7 @@ class App(Gtk.Application):
         Gtk.main()
 
     def quit(self):
+        """Terminate the application."""
         sys.exit(0)
 
 

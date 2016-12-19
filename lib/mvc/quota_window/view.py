@@ -40,6 +40,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         self.add(self.grid)
 
     def getIcon(self):
+        """Retrieve the path to the icon from /tmp with the UID prepended."""
         p = '/tmp/' + getuid() + '_compiled.png'
 
         if not os.path.exists(p):
