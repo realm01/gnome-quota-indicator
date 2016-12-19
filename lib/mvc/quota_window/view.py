@@ -3,6 +3,7 @@
 from gi.repository import Gtk
 from lib.helpers import get_path, getuid
 from lib.mvc.bases import ViewBase
+from lib.exception_feedback import show_dialog_error
 
 import os
 
