@@ -3,7 +3,7 @@
 from gi.repository import Gtk
 from lib.helpers import get_path, getuid
 from lib.mvc.bases import ViewBase
-from lib.exception_feedback import show_dialog_error
+from lib.exception_feedback import show_dialog_error, add_default_exception_handling
 
 import os
 
@@ -19,6 +19,7 @@ class QuotaWindowView(Gtk.Window, ViewBase):
         self.on_open = None
         self.on_close = None
 
+    @add_default_exception_handling('Failed to initialize Quota Window')
     def initialize(self):
         """Create the actual view with all widgets."""
         self.connect("delete-event", self.cb_close)
@@ -42,13 +43,18 @@ class QuotaWindowView(Gtk.Window, ViewBase):
 
     def getIcon(self):
         """Retrieve the path to the icon from /tmp with the UID prepended."""
-        p = '/tmp/' + getuid() + '_compiled.png'
+        failed = False
+        try:
+            p = '/tmp/' + getuid() + '_compiled.png'
+        except Exception as e:
+            failed = True
 
-        if not os.path.exists(p):
+        if not os.path.exists(p) or failed:
             return get_path('../img/icon_default.png')
         else:
             return p
 
+    @add_default_exception_handling('Failed to open Quota Window')
     def cb_show(self, w, data):
         """On show."""
         self.set_icon_from_file(self.getIcon())
@@ -58,28 +64,35 @@ class QuotaWindowView(Gtk.Window, ViewBase):
 
         self.tree_view.set_model(self.model.create_model())
         self.show_all()
+
         return True
 
+    @add_default_exception_handling('Failed to close Quota Window')
     def cb_close(self, w, data):
         """"On window close."""
         if self.on_close is not None:
             self.on_close()
 
         self.hide()
+
         return True
 
+    @add_default_exception_handling('Failed to update Quota Window')
     def on_update(self):
         """On update."""
         self.tree_view.set_model(self.model.create_model())
 
+    @add_default_exception_handling()
     def register_on_open(self, func):
         """Register on open event."""
         self.on_open = func
 
+    @add_default_exception_handling()
     def register_on_close(self, func):
         """Register on close event."""
         self.on_close = func
 
+    @add_default_exception_handling('Failed to display storage information')
     def create_columns(self, tree_view):
         """Create the columns of the TreeView."""
         rendererText = Gtk.CellRendererText()
