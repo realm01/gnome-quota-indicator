@@ -3,6 +3,7 @@
 import subprocess as sp
 import os
 import yaml
+from lib.exception_feedback import show_cmd_error
 
 
 def getuid():
@@ -11,51 +12,57 @@ def getuid():
 
 
 def load_config():
-    """"Load configuration format it and return it."""
-    with open(get_path('../app.conf')) as file:
-        config = yaml.load(file)
+    try:
+        """"Load configuration format it and return it."""
+        with open(get_path('../app.conf')) as file:
+            config = yaml.load(file)
 
-    use_etc_exports = config.get('use_etc_exports')
-    if config.get('fs') is None or not isinstance(config.get('fs'), list):
-        config['fs'] = []
+        use_etc_exports = config.get('use_etc_exports')
+        if config.get('fs') is None or not isinstance(config.get('fs'), list):
+            config['fs'] = []
 
-    if use_etc_exports is not None and use_etc_exports is True:
-        try:
-            with open('/etc/exports') as efile:
-                line = efile.readline()
-                while line:
-                    if line.strip()[0] == '#':
-                        line = efile.readline()
-                        continue
-
-                    config['fs'].append(line.strip().split()[0])
+        if use_etc_exports is not None and use_etc_exports is True:
+            try:
+                with open('/etc/exports') as efile:
                     line = efile.readline()
-        except:
-            print('/etc/exports not found.')
+                    while line:
+                        if line.strip()[0] == '#':
+                            line = efile.readline()
+                            continue
 
-    if config.get('refresh') is None:
-        config['refresh'] = {}
+                        config['fs'].append(line.strip().split()[0])
+                        line = efile.readline()
+            except:
+                print('/etc/exports not found.')
 
-    if config['refresh'].get('quota_rate') is None:
-        config['refresh']['quota_rate'] = 15 * 1000 * 60
-    else:
-        config['refresh']['quota_rate'] *= 1000 * 60
+        if config.get('refresh') is None:
+            config['refresh'] = {}
 
-    if config['refresh'].get('fs_rate') is None:
-        config['refresh']['fs_rate'] = 15 * 1000 * 60
-    else:
-        config['refresh']['fs_rate'] *= 1000 * 60
+        if config['refresh'].get('quota_rate') is None:
+            config['refresh']['quota_rate'] = 15 * 1000 * 60
+        else:
+            config['refresh']['quota_rate'] *= 1000 * 60
 
-    return config
+        if config['refresh'].get('fs_rate') is None:
+            config['refresh']['fs_rate'] = 15 * 1000 * 60
+        else:
+            config['refresh']['fs_rate'] *= 1000 * 60
 
+        return config
+    except Exception as e:
+        show_cmd_error('Failed to read configuration file', e)
+        raise e
 
 def sys_call(cmd):
     """Execute a system call and return utf-8 formated output."""
-    proc = sp.Popen(cmd, stdout=sp.PIPE, shell=True)
-    out = proc.communicate()
-    out = out[0].decode('utf-8')
-
-    return out
+    try:
+        proc = sp.Popen(cmd, stdout=sp.PIPE, shell=True)
+        out = proc.communicate()
+        out = out[0].decode('utf-8')
+        return out
+    except Exception as e:
+        show_cmd_error('Failed to execute shell command', e)
+        raise e
 
 
 def get_path(file):

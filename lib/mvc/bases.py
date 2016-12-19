@@ -1,6 +1,7 @@
 """MVC Base classes."""
 
 from lib.helpers import load_config
+from lib.exception_feedback import show_cmd_error
 
 
 class ModelBase():
@@ -25,5 +26,9 @@ class ControllerBase():
 
     def __init__(self, app, model, view):
         """Ctor of ControllerBase, creates model and view."""
-        self.model = model()
-        self.view = view(app, self.model)
+        try:
+            self.model = model()
+            self.view = view(app, self.model)
+        except Exception as e:
+            show_cmd_error('Couldnt create model and view', e)
+            raise e
