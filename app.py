@@ -17,7 +17,7 @@ from gi.repository import Gtk
 from lib.mvc.quota_indicator.controller import QuotaIndicatorController
 from lib.mvc.quota_window.controller import QuotaWindowController
 import signal
-from lib.helpers import show_cmd_error
+from lib.exception_feedback import show_cmd_error
 
 
 class App(Gtk.Application):
