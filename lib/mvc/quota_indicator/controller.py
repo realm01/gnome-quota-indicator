@@ -100,7 +100,7 @@ class QuotaIndicatorController(ControllerBase):
 
         try:
             lines = out.splitlines()
-            quota_a = lines[len(lines) - 1]
+            quota_a = lines[-1]
             quota_a = quota_a.split()
 
             curr = float(quota_a[0])
@@ -155,6 +155,7 @@ class QuotaIndicatorController(ControllerBase):
             if self.model.timers['warning'] <= 0:
                 self.model.timers['warning'] = self.model.config['refresh']['warning']
         except Exception as e:
+            print(e)
             ret = {
                 'label': 'No Quota',
                 'progress_fraction': 0.0,
