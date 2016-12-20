@@ -45,16 +45,16 @@ class QuotaIndicatorController(ControllerBase):
     def update_notification_window(self):
         show = False
         if self.model.quota['state'] == QuotaState.warning:
-            self.notification_window.model.title = 'You quota is soon full'
+            self.notification_window.model.title = 'Your quota is soon full'
             show = True
         elif self.model.quota['state'] == QuotaState.critical:
-            self.notification_window.model.title = 'You quota is almost full'
+            self.notification_window.model.title = 'Your quota is almost full'
             show = True
 
-        self.notification_window.model.text = 'Your current quota usage: ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+        self.notification_window.model.text = 'Current quota usage: ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
 
         if show:
-            self.notification_window.view.show()
+            self.notification_window.view.cb_show(0, 0)
 
     @add_default_exception_handling('Failed to generate icon')
     def generateIcon(self, precentage, color):
