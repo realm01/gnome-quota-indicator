@@ -18,13 +18,13 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         self.connect("delete-event", self.cb_close)
 
         # change size
-        self.resize(300, 150)
+        self.resize(200, 150)
 
         # create vbox
-        vbox = Gtk.VBox(spacing=6)
+        vbox = Gtk.VBox(spacing=0)
 
         # create hbox
-        hbox = Gtk.HBox(spacing=6)
+        hbox = Gtk.HBox(spacing=0)
 
         # add image to hbox
         self.image = Gtk.Image()
@@ -32,7 +32,7 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         hbox.pack_start(self.image, True, True, 0)
 
         # create vbox_right
-        vbox_right = Gtk.VBox(spacing=6)
+        vbox_right = Gtk.VBox(spacing=0)
 
         # add title to hbox
         self.title_label = Gtk.Label(self.model.title)
@@ -72,7 +72,7 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
     @add_default_exception_handling('Failed to update notification window')
     def update(self):
         self.image.set_from_file(self.getIcon())
-        self.title_label.set_text(self.model.title)
+        self.title_label.set_markup('<span font_weight="bold" foreground="Black" size="x-large">{title}</span>'.format(title=self.model.title))
         self.text_label.set_text(self.model.text)
 
         return True
