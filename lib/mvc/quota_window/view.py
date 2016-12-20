@@ -1,20 +1,17 @@
 """View of QuotaWindowView."""
 
 from gi.repository import Gtk
-from lib.helpers import get_path, getuid
-from lib.mvc.bases import ViewBase
-from lib.exception_feedback import show_dialog_error, add_default_exception_handling
-
-import os
+from lib.mvc.bases import WindowViewBase
+from lib.exception_feedback import add_default_exception_handling
 
 
-class QuotaWindowView(Gtk.Window, ViewBase):
+class QuotaWindowView(Gtk.Window, WindowViewBase):
     """View of QuotaWindowView."""
 
     def __init__(self, app, model):
         """Ctor of QuotaWindowView."""
-        ViewBase.__init__(self, app, model)
         Gtk.Window.__init__(self)
+        ViewBase.__init__(self, app, model)
 
         self.on_open = None
         self.on_close = None
@@ -23,11 +20,6 @@ class QuotaWindowView(Gtk.Window, ViewBase):
     def initialize(self):
         """Create the actual view with all widgets."""
         self.connect("delete-event", self.cb_close)
-
-        self.set_title(self.app.name)
-        self.set_resizable(False)
-        self.resize(200, 400)
-        self.set_icon_from_file(self.getIcon())
 
         # create tree view
         self.tree_view = Gtk.TreeView(self.model.create_model())
@@ -40,19 +32,6 @@ class QuotaWindowView(Gtk.Window, ViewBase):
 
         # attach grid to window
         self.add(self.grid)
-
-    def getIcon(self):
-        """Retrieve the path to the icon from /tmp with the UID prepended."""
-        failed = False
-        try:
-            p = '/tmp/' + getuid() + '_compiled.png'
-        except Exception as e:
-            failed = True
-
-        if not os.path.exists(p) or failed:
-            return get_path('../img/icon_default.png')
-        else:
-            return p
 
     @add_default_exception_handling('Failed to open Quota Window')
     def cb_show(self, w, data):

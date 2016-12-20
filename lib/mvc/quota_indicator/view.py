@@ -3,9 +3,9 @@
 from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
 from lib.helpers import get_path
-from lib.mvc.quota_indicator.model import MenuItem
+from lib.mvc.quota_indicator.model import MenuItem, QuotaState
 from lib.mvc.bases import ViewBase
-from lib.exception_feedback import add_default_exception_handling
+from lib.exception_feedback import add_default_exception_handling, show_dialog_notification
 
 
 class QuotaIndicatorView(ViewBase):
@@ -115,13 +115,23 @@ class QuotaIndicatorView(ViewBase):
         if self.upd_quota is not None:
             self.upd_quota()
 
-            self.model.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%')
+            quota_precent = str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+
+            self.model.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + quota_precent)
             self.model.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
             icon_path = self.model.quota.get('icon')
             if icon_path[0] != '/':
                 icon_path = get_path(icon_path)
 
             self.ind.set_icon(icon_path)
+
+            if self.model.quota.get('show_warning') == QuotaState.warning:
+                # show_dialog_notification('Quota is soon full', 'Your current quota usage: ' + quota_precent)
+                pass
+            elif self.model.quota.get('show_warning') == QuotaState.critical:
+                # show_dialog_notification('Quota is almost full', 'Your current quota usage: ' + quota_precent)
+                pass
+
 
         return True
 

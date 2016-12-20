@@ -1,7 +1,7 @@
 """Model classes of Quota Indicator."""
 
-from lib.helpers import load_config
 from lib.mvc.bases import ModelBase
+from enum import Enum
 
 
 class MenuItem():
@@ -11,6 +11,12 @@ class MenuItem():
         """Ctor of MenuItem."""
         self.progressbar = progressbar
         self.label = label
+
+class QuotaState(Enum):
+    """Enumerate for the quota state."""
+    good = 1
+    warning = 2
+    critical = 3
 
 
 class QuotaIndicatorModel(ModelBase):
@@ -22,3 +28,7 @@ class QuotaIndicatorModel(ModelBase):
         self.menu_items = {}
         self.quota = {}
         self.fs = []
+        self.timers = {
+            'warning': 0,
+            'critical': 0
+        }

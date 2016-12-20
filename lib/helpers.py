@@ -48,6 +48,16 @@ def load_config():
         else:
             config['refresh']['fs_rate'] *= 1000 * 60
 
+        if config['refresh'].get('warning') is None:
+            config['refresh']['warning'] = 60 * 1000 * 60
+        else:
+            config['refresh']['warning'] *= 1000 * 60
+
+        if config['refresh'].get('critical') is None:
+            config['refresh']['critical'] = 30 * 1000 * 60
+        else:
+            config['refresh']['critical'] *= 1000 * 60
+
         return config
     except Exception as e:
         show_cmd_error('Failed to read configuration file', e)

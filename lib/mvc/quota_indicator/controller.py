@@ -1,7 +1,7 @@
 """Controller of Quota Indicator."""
 
 import sys
-from lib.mvc.quota_indicator.model import QuotaIndicatorModel
+from lib.mvc.quota_indicator.model import QuotaIndicatorModel, QuotaState
 from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path, getuid
 from lib.mvc.bases import ControllerBase
@@ -108,21 +108,37 @@ class QuotaIndicatorController(ControllerBase):
             if critical_level is None:
                 critical_level = 0.9
 
+            self.model.timers['warning'] -= self.model.config['refresh']['quota_rate']
+            self.model.timers['critical'] -= self.model.config['refresh']['quota_rate']
+
             if curr / hard >= critical_level:
                 color = (244, 67, 54)
+                if self.model.timers['critical'] <= 0:
+                    ret['show_warning'] = QuotaState.critical
             elif curr / hard >= warning_level:
                 color = (255, 235, 59)
+                if self.model.timers['warning'] <= 0:
+                    ret['show_warning'] = QuotaState.warning
             else:
                 color = (76, 175, 80)
+                ret['show_warning'] = QuotaState.good
 
             self.generateIcon(curr / hard, color)
 
             ret['icon'] = '/tmp/' + getuid() + '_compiled.png'
-        except:
+
+            if self.model.timers['critical'] <= 0:
+                self.model.timers['critical'] = self.model.config['refresh']['critical']
+
+            if self.model.timers['warning'] <= 0:
+                self.model.timers['warning'] = self.model.config['refresh']['warning']
+        except Exception as e:
+            print(e)
             ret = {
                 'label': 'No Quota',
                 'progress_fraction': 0.0,
-                'icon': '../img/icon_default.png'
+                'icon': '../img/icon_default.png',
+                'warning': QuotaState.good
             }
 
         self.model.quota = ret
