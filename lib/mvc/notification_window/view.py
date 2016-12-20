@@ -12,6 +12,8 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         Gtk.Window.__init__(self)
         WindowViewBase.__init__(self, app, model)
 
+        self.open_usage_event = None
+
     @add_default_exception_handling('Failed to initialize Quota Indicator')
     def initialize(self):
         """Create the actual view with all widgets."""
@@ -48,14 +50,34 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         # add hbox to vbox
         vbox.pack_start(hbox, True, True, 2)
 
-        # add close button to vbox
+        # create hbox_buttons
+        hbox_buttons = Gtk.HBox(spacing=0)
+
+        # add close button to hbox_buttons
+        button = Gtk.Button()
+        button.set_label("Show Usage")
+        button.connect("clicked", self.open_usage, "Show Usage")
+        hbox_buttons.pack_start(button, True, True, 0)
+
+        # add close button to hbox_buttons
         button = Gtk.Button()
         button.set_label("Ok")
         button.connect("clicked", self.cb_close, "Ok")
-        vbox.pack_start(button, True, True, 2)
+        hbox_buttons.pack_start(button, True, True, 1)
+
+        # add hbox_buttons to vbox
+        vbox.pack_start(hbox_buttons, True, True, 3)
 
         # add vbox to window
         self.add(vbox)
+
+    @add_default_exception_handling()
+    def register_open_usage_event(self, func):
+        self.open_usage_event = func
+
+    @add_default_exception_handling()
+    def open_usage(self, *args):
+        self.open_usage_event()
 
     @add_default_exception_handling()
     def cb_close(self, w, data):
