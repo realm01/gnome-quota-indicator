@@ -96,5 +96,6 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         self.image.set_from_file(self.getIcon())
         self.title_label.set_markup('<span font_weight="bold" foreground="Black" size="x-large">{title}</span>'.format(title=self.model.title))
         self.text_label.set_text(self.model.text)
-
+        self.present()
+        
         return True
