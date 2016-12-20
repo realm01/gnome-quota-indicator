@@ -11,7 +11,7 @@ class QuotaWindowView(Gtk.Window, WindowViewBase):
     def __init__(self, app, model):
         """Ctor of QuotaWindowView."""
         Gtk.Window.__init__(self)
-        ViewBase.__init__(self, app, model)
+        WindowViewBase.__init__(self, app, model)
 
         self.on_open = None
         self.on_close = None

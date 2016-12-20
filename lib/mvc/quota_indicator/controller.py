@@ -7,6 +7,8 @@ from lib.helpers import sys_call, get_path, getuid
 from lib.mvc.bases import ControllerBase
 from lib.exception_feedback import add_default_exception_handling
 
+from lib.mvc.notification_window.controller import NotificationWindowController
+
 from PIL import Image, ImageDraw, ImageOps
 
 class QuotaIndicatorController(ControllerBase):
@@ -23,6 +25,8 @@ class QuotaIndicatorController(ControllerBase):
         self.view.register_quit(self.quit)
         self.view.register_validate_fs(self.validate_fs)
 
+        self.notification_window = NotificationWindowController(self.view.app)
+
         self.view.initialize()
 
     def register_quit(self, func):
@@ -37,6 +41,20 @@ class QuotaIndicatorController(ControllerBase):
         """Check if a given path is in df."""
         out = sys_call('df -h | grep ' + name)
         return not out.strip() == ''
+
+    def update_notification_window(self):
+        show = False
+        if self.model.quota['state'] == QuotaState.warning:
+            self.notification_window.model.title = 'You quota is soon full'
+            show = True
+        elif self.model.quota['state'] == QuotaState.critical:
+            self.notification_window.model.title = 'You quota is almost full'
+            show = True
+
+        self.notification_window.model.text = 'Your current quota usage: ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+
+        if show:
+            self.notification_window.view.show()
 
     @add_default_exception_handling('Failed to generate icon')
     def generateIcon(self, precentage, color):
@@ -114,14 +132,14 @@ class QuotaIndicatorController(ControllerBase):
             if curr / hard >= critical_level:
                 color = (244, 67, 54)
                 if self.model.timers['critical'] <= 0:
-                    ret['show_warning'] = QuotaState.critical
+                    ret['state'] = QuotaState.critical
             elif curr / hard >= warning_level:
                 color = (255, 235, 59)
                 if self.model.timers['warning'] <= 0:
-                    ret['show_warning'] = QuotaState.warning
+                    ret['state'] = QuotaState.warning
             else:
                 color = (76, 175, 80)
-                ret['show_warning'] = QuotaState.good
+                ret['state'] = QuotaState.good
 
             self.generateIcon(curr / hard, color)
 
@@ -138,10 +156,11 @@ class QuotaIndicatorController(ControllerBase):
                 'label': 'No Quota',
                 'progress_fraction': 0.0,
                 'icon': '../img/icon_default.png',
-                'warning': QuotaState.good
+                'state': QuotaState.good
             }
 
         self.model.quota = ret
+        self.update_notification_window()
 
     @add_default_exception_handling('Failed to gather filesystem details')
     def update_fs(self):

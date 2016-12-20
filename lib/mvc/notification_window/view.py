@@ -10,7 +10,7 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
     def __init__(self, app, model):
         """Ctor of NotificationWindowView."""
         Gtk.Window.__init__(self)
-        ViewBase.__init__(self, app, model)
+        WindowViewBase.__init__(self, app, model)
 
     @add_default_exception_handling('Failed to initialize Quota Indicator')
     def initialize(self):
@@ -22,22 +22,22 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
 
         # add image to vbox
         self.image = Gtk.Image()
-        self.image.image.set_from_file(self.getIcon())
-        vbox.pack_start(self.image)
+        self.image.set_from_file(self.getIcon())
+        vbox.pack_start(self.image, True, True, 0)
 
         # create hbox
         hbox = Gtk.HBox(spacing=6)
 
         # add title to hbox
         self.title_label = Gtk.Label(self.model.title)
-        hbox.pack_start(self.title_label)
+        hbox.pack_start(self.title_label, True, True, 0)
 
         # add text to hbox
         self.text_label = Gtk.Label(self.model.text)
-        hbox.pack_start(self.text_label)
+        hbox.pack_start(self.text_label, True, True, 0)
 
         # add hbox to vbox
-        vbox.pack_start(hbox)
+        vbox.pack_start(hbox, True, True, 0)
 
         # add vbox to window
         self.add(vbox)
@@ -50,6 +50,8 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
     @add_default_exception_handling()
     def cb_show(self, w, data):
         self.update()
+        self.show_all()
+
         return True
 
     @add_default_exception_handling('Failed to update notification window')

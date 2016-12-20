@@ -3,9 +3,9 @@
 from gi.repository import Gtk, GLib
 from gi.repository import AppIndicator3 as AppIndicator
 from lib.helpers import get_path
-from lib.mvc.quota_indicator.model import MenuItem, QuotaState
+from lib.mvc.quota_indicator.model import MenuItem
 from lib.mvc.bases import ViewBase
-from lib.exception_feedback import add_default_exception_handling, show_dialog_notification
+from lib.exception_feedback import add_default_exception_handling
 
 
 class QuotaIndicatorView(ViewBase):
@@ -124,14 +124,6 @@ class QuotaIndicatorView(ViewBase):
                 icon_path = get_path(icon_path)
 
             self.ind.set_icon(icon_path)
-
-            if self.model.quota.get('show_warning') == QuotaState.warning:
-                # show_dialog_notification('Quota is soon full', 'Your current quota usage: ' + quota_precent)
-                pass
-            elif self.model.quota.get('show_warning') == QuotaState.critical:
-                # show_dialog_notification('Quota is almost full', 'Your current quota usage: ' + quota_precent)
-                pass
-
 
         return True
 
