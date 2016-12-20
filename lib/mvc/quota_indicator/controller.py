@@ -43,6 +43,7 @@ class QuotaIndicatorController(ControllerBase):
         return not out.strip() == ''
 
     def update_notification_window(self):
+        """Validate quota results and update the notification window."""
         show = False
         if self.model.quota['state'] == QuotaState.warning:
             self.notification_window.model.title = 'Your quota is soon full!'
@@ -58,6 +59,7 @@ class QuotaIndicatorController(ControllerBase):
 
     @add_default_exception_handling('Failed to generate icon')
     def generateIcon(self, precentage, color):
+        """Generate the icon and save it in /tmp."""
         icon = Image.open(get_path("../img/icon_default.png"))
         img = Image.new('RGBA', icon.size)
 

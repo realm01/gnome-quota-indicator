@@ -1,9 +1,7 @@
 """Functions which are used for displaying exceptions to the user."""
 
 from gi.repository import Gtk
-from os import getuid
 
-from threading import Thread
 
 def show_cmd_error(msg, exception):
     """Print a formated error message with reason to the cmd."""
@@ -17,9 +15,13 @@ def show_dialog_error(msg, exception):
     dialog.run()
     dialog.destroy()
 
+
 def add_default_exception_handling(msg='An error occured'):
+    """Decorator generator of default exception handling."""
     def inner(func):
+        """Actual decorator for default exception handling."""
         def f(*args, **kwargs):
+            """The decorated function for default exception handling."""
             try:
                 return func(*args, **kwargs)
             except Exception as e:

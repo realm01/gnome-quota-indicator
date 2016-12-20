@@ -73,19 +73,23 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
 
     @add_default_exception_handling()
     def register_open_usage_event(self, func):
+        """Register open_usage event."""
         self.open_usage_event = func
 
     @add_default_exception_handling()
     def open_usage(self, *args):
+        """Open usage event."""
         self.open_usage_event()
 
     @add_default_exception_handling()
     def cb_close(self, w, data):
+        """On close event."""
         self.hide()
         return True
 
     @add_default_exception_handling()
     def cb_show(self, w, data):
+        """On show event."""
         self.update()
         self.show_all()
 
@@ -93,9 +97,10 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
 
     @add_default_exception_handling('Failed to update notification window')
     def update(self):
+        """Update the notification window view."""
         self.image.set_from_file(self.getIcon())
         self.title_label.set_markup('<span font_weight="bold" foreground="Black" size="x-large">{title}</span>'.format(title=self.model.title))
         self.text_label.set_text(self.model.text)
         self.present()
-        
+
         return True

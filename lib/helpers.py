@@ -12,6 +12,7 @@ def getuid():
 
 
 def load_config():
+    """Load, check, correct and return the config as a hash."""
     try:
         """"Load configuration format it and return it."""
         with open(get_path('../app.conf')) as file:
