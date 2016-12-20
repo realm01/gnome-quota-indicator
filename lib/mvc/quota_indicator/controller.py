@@ -139,6 +139,8 @@ class QuotaIndicatorController(ControllerBase):
                     ret['state'] = QuotaState.warning
             else:
                 color = (76, 175, 80)
+
+            if 'state' not in ret:
                 ret['state'] = QuotaState.good
 
             self.generateIcon(curr / hard, color)
@@ -151,7 +153,6 @@ class QuotaIndicatorController(ControllerBase):
             if self.model.timers['warning'] <= 0:
                 self.model.timers['warning'] = self.model.config['refresh']['warning']
         except Exception as e:
-            print(e)
             ret = {
                 'label': 'No Quota',
                 'progress_fraction': 0.0,
