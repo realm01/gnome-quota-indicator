@@ -8,5 +8,5 @@ class NotificationWindowModel(ModelBase):
     def __init__(self):
         """Ctor of NotificationWindowModel."""
         super().__init__()
-        self.image_path = ''
+        self.title = ''
         self.text = ''

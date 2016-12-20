@@ -17,19 +17,6 @@ def show_dialog_error(msg, exception):
     dialog.run()
     dialog.destroy()
 
-def show_dialog_notification(title, msg):
-    """Show a notification dialog (Blocking call)."""
-    dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, title)
-    dialog.format_secondary_text(msg)
-
-    image = Gtk.Image()
-    image.set_from_file('/tmp/' + str(getuid()) + '_compiled.png')
-    dialog.set_image(image)
-    dialog.show_all()
-
-    dialog.run()
-    dialog.destroy()
-
 def add_default_exception_handling(msg='An error occured'):
     def inner(func):
         def f(*args, **kwargs):
