@@ -10,6 +10,7 @@ from lib.mvc.notification_window.controller import NotificationWindowController
 from lib.constants import colors
 from PIL import Image, ImageDraw, ImageOps
 
+
 class QuotaIndicatorController(ControllerBase):
     """Controller of Quota Indicator."""
 
@@ -48,12 +49,15 @@ class QuotaIndicatorController(ControllerBase):
         show = False
         if self.model.quota['state'] != QuotaState.good:
             self.notification_window.model.text = 'Your quota usage is at'
-            self.notification_window.model.precentage = str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+            self.notification_window.model.precentage = str(
+                int(self.model.quota.get('progress_fraction') * 100)) + '%'
 
             if self.model.quota['state'] == QuotaState.critical:
-                self.notification_window.model.precentage_color = colors['critical']['hex']
+                self.notification_window.model.precentage_color = colors[
+                    'critical']['hex']
             else:
-                self.notification_window.model.precentage_color = colors['warning']['hex']
+                self.notification_window.model.precentage_color = colors[
+                    'warning']['hex']
 
             show = True
 
@@ -77,13 +81,13 @@ class QuotaIndicatorController(ControllerBase):
 
         draw.pieslice(
             (
-                x/2 + x_offset - r,
-                y/2 + y_offset - r,
-                x/2 + r + x_offset,
-                y/2 + r + y_offset
+                x / 2 + x_offset - r,
+                y / 2 + y_offset - r,
+                x / 2 + r + x_offset,
+                y / 2 + r + y_offset
             ),
             -90,
-            (360 * precentage) -90,
+            (360 * precentage) - 90,
             fill=color,
             outline=(0, 0, 0))
 
@@ -114,8 +118,7 @@ class QuotaIndicatorController(ControllerBase):
 
             ret = {
                 'label': 'Quota ' + str(int(curr)) + '/' + str(int(hard)) + ' MB',
-                'progress_fraction': curr / hard
-            }
+                'progress_fraction': curr / hard}
 
             warning_level = self.model.config.get('notify_levels')
             if warning_level is not None:
@@ -131,8 +134,10 @@ class QuotaIndicatorController(ControllerBase):
             if critical_level is None:
                 critical_level = 0.9
 
-            self.model.timers['warning'] -= self.model.config['refresh']['quota_rate']
-            self.model.timers['critical'] -= self.model.config['refresh']['quota_rate']
+            self.model.timers[
+                'warning'] -= self.model.config['refresh']['quota_rate']
+            self.model.timers[
+                'critical'] -= self.model.config['refresh']['quota_rate']
 
             if curr / hard >= critical_level:
                 color = colors['critical']['rgb']
@@ -153,10 +158,12 @@ class QuotaIndicatorController(ControllerBase):
             ret['icon'] = '/tmp/' + getuid() + '_compiled.png'
 
             if self.model.timers['critical'] <= 0:
-                self.model.timers['critical'] = self.model.config['refresh']['critical']
+                self.model.timers['critical'] = self.model.config[
+                    'refresh']['critical']
 
             if self.model.timers['warning'] <= 0:
-                self.model.timers['warning'] = self.model.config['refresh']['warning']
+                self.model.timers['warning'] = self.model.config[
+                    'refresh']['warning']
         except Exception as e:
             print(e)
             ret = {

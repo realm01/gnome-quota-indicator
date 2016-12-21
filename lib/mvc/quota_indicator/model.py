@@ -12,6 +12,7 @@ class MenuItem():
         self.progressbar = progressbar
         self.label = label
 
+
 class QuotaState(Enum):
     """Enumerate for the quota state."""
     good = 1

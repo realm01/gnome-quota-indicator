@@ -64,6 +64,7 @@ def load_config():
         show_cmd_error('Failed to read configuration file', e)
         raise e
 
+
 def sys_call(cmd):
     """Execute a system call and return utf-8 formated output."""
     try:

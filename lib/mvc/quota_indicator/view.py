@@ -33,7 +33,8 @@ class QuotaIndicatorView(ViewBase):
         self.model.menu_items = {}
         self.menu = Gtk.Menu()
 
-        self.create_menu_item('quota', self.menu, ' Quota 0/0 MB | 0%', self.app.quota_window.view.cb_show)
+        self.create_menu_item(
+            'quota', self.menu, ' Quota 0/0 MB | 0%', self.app.quota_window.view.cb_show)
         for fs in self.model.config['fs']:
             self.create_menu_item(fs, self.menu, ' FS 0/0 MB | 0%')
 
@@ -115,10 +116,13 @@ class QuotaIndicatorView(ViewBase):
         if self.upd_quota is not None:
             self.upd_quota()
 
-            quota_precent = str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+            quota_precent = str(
+                int(self.model.quota.get('progress_fraction') * 100)) + '%'
 
-            self.model.menu_items['quota'].label.set_text(' ' + self.model.quota.get('label') + ' | ' + quota_precent)
-            self.model.menu_items['quota'].progressbar.set_fraction(self.model.quota.get('progress_fraction'))
+            self.model.menu_items['quota'].label.set_text(
+                ' ' + self.model.quota.get('label') + ' | ' + quota_precent)
+            self.model.menu_items['quota'].progressbar.set_fraction(
+                self.model.quota.get('progress_fraction'))
             icon_path = self.model.quota.get('icon')
             if icon_path[0] != '/':
                 icon_path = get_path(icon_path)
@@ -134,7 +138,12 @@ class QuotaIndicatorView(ViewBase):
             self.upd_fs()
 
             for ret in self.model.fs:
-                self.model.menu_items[ret.get('fs')].label.set_text(' ' + ret.get('label') + ' | ' + str(int(ret.get('progress_fraction') * 100)) + '%')
-                self.model.menu_items[ret.get('fs')].progressbar.set_fraction(ret.get('progress_fraction'))
+                self.model.menu_items[
+                    ret.get('fs')].label.set_text(
+                    ' ' + ret.get('label') + ' | ' +
+                    str(int(ret.get('progress_fraction') * 100)) + '%')
+                self.model.menu_items[
+                    ret.get('fs')].progressbar.set_fraction(
+                    ret.get('progress_fraction'))
 
         return True

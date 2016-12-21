@@ -47,6 +47,7 @@ class WindowViewBase(ViewBase):
         else:
             return p
 
+
 class ControllerBase():
     """Base class of all Controllers."""
 

@@ -87,6 +87,9 @@ class QuotaWindowView(Gtk.Window, WindowViewBase):
         column = Gtk.TreeViewColumn("Size [MB]", rendererText, text=1)
         column.set_sort_column_id(1)
 
-        column.set_cell_data_func(rendererText, lambda col, cell, model, iter, unused: cell.set_property("text", '{0:.2f}'.format(model.get(iter, 1)[0])))
+        column.set_cell_data_func(
+            rendererText, lambda col, cell, model, iter,
+            unused: cell.set_property(
+                "text", '{0:.2f}'.format(model.get(iter, 1)[0])))
 
         tree_view.append_column(column)

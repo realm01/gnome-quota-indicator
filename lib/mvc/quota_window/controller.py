@@ -28,7 +28,8 @@ class QuotaWindowController(ControllerBase):
         """On open event."""
         if not self.is_running:
             self.is_running = True
-            self.usage = Usage(self.model, self.view.on_update, self.cleanup_thread)
+            self.usage = Usage(
+                self.model, self.view.on_update, self.cleanup_thread)
             self.usage.start()
 
     def on_close(self):

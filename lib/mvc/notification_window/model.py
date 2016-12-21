@@ -2,6 +2,7 @@
 
 from lib.mvc.bases import ModelBase
 
+
 class NotificationWindowModel(ModelBase):
     """Model of the notification window."""
 

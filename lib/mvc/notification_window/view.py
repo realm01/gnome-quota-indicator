@@ -7,6 +7,7 @@ from lib.helpers import getuid
 
 
 class NotificationWindowView(Gtk.Window, WindowViewBase):
+
     def __init__(self, app, model):
         """Ctor of NotificationWindowView."""
         Gtk.Window.__init__(self)
@@ -37,7 +38,8 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         vbox_right = Gtk.VBox(spacing=0)
 
         # add text to vbox_right
-        self.text_label = Gtk.Label(' '.join([self.model.text, self.model.precentage]))
+        self.text_label = Gtk.Label(
+            ' '.join([self.model.text, self.model.precentage]))
         vbox_right.pack_start(self.text_label, True, True, 0)
 
         # add vbox_right to hbox
@@ -95,7 +97,12 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
     def update(self):
         """Update the notification window view."""
         self.image.set_from_file(self.getIcon())
-        self.text_label.set_markup('<span font_weight="bold" foreground="Black" size="large">{text}</span> <span font_weight="bold" color="{color}" background="black" size="large">{precentage}</span>'.format(text=self.model.text, precentage=self.model.precentage, color=self.model.precentage_color))
+        self.text_label.set_markup(
+            '<span font_weight="bold" foreground="Black" size="large">{text}</span> <span font_weight="bold" color="{color}" background="black" size="large">{precentage}</span>'.
+            format(
+                text=self.model.text,
+                precentage=self.model.precentage,
+                color=self.model.precentage_color))
         self.present()
 
         return True
