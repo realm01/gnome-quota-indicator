@@ -31,24 +31,24 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         # add image to hbox
         self.image = Gtk.Image()
         self.image.set_from_file(self.getIcon())
-        hbox.pack_start(self.image, True, True, 0)
+        hbox.pack_start(self.image, False, True, 0)
 
         # create vbox_right
         vbox_right = Gtk.VBox(spacing=0)
 
         # add title to hbox
         self.title_label = Gtk.Label(self.model.title)
-        vbox_right.pack_start(self.title_label, True, True, 0)
+        vbox_right.pack_start(self.title_label, True, False, 0)
 
         # add text to hbox
         self.text_label = Gtk.Label(self.model.text)
-        vbox_right.pack_start(self.text_label, True, True, 1)
+        vbox_right.pack_start(self.text_label, True, False, 0)
 
         # add vbox_right to hbox
-        hbox.pack_start(vbox_right, True, True, 150)
+        hbox.pack_start(vbox_right, False, False, 0)
 
         # add hbox to vbox
-        vbox.pack_start(hbox, True, True, 2)
+        vbox.pack_start(hbox, False, False, 0)
 
         # create hbox_buttons
         hbox_buttons = Gtk.HBox(spacing=0)
@@ -63,10 +63,10 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         button = Gtk.Button()
         button.set_label("Ok")
         button.connect("clicked", self.cb_close, "Ok")
-        hbox_buttons.pack_start(button, True, True, 1)
+        hbox_buttons.pack_start(button, True, True, 0)
 
         # add hbox_buttons to vbox
-        vbox.pack_start(hbox_buttons, True, True, 3)
+        vbox.pack_start(hbox_buttons, False, True, 0)
 
         # add vbox to window
         self.add(vbox)

@@ -46,10 +46,10 @@ class QuotaIndicatorController(ControllerBase):
         """Validate quota results and update the notification window."""
         show = False
         if self.model.quota['state'] == QuotaState.warning:
-            self.notification_window.model.title = 'Your quota is soon full!'
+            self.notification_window.model.title = 'You will soon reach your quota limit!'
             show = True
         elif self.model.quota['state'] == QuotaState.critical:
-            self.notification_window.model.title = 'Your quota is almost full!'
+            self.notification_window.model.title = 'You have almost reached your quota limit!'
             show = True
 
         self.notification_window.model.text = 'Current quota usage: ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
