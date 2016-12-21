@@ -37,11 +37,13 @@ class QuotaIndicatorController(ControllerBase):
         """Quit event."""
         self.quit_event()
 
+    @add_default_exception_handling('Failed to check path')
     def validate_fs(self, name):
         """Check if a given path is in df."""
         out = sys_call('df -h | grep ' + name)
         return not out.strip() == ''
 
+    @add_default_exception_handling('Failed to update notification window')
     def update_notification_window(self):
         """Validate quota results and update the notification window."""
         show = False

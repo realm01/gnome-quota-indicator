@@ -23,6 +23,7 @@ class QuotaWindowController(ControllerBase):
 
         self.view.initialize()
 
+    @add_default_exception_handling('Failed to start gathering storate stats')
     def on_open(self):
         """On open event."""
         if not self.is_running:
