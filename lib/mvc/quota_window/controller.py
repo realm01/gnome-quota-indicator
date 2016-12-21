@@ -53,17 +53,17 @@ class Usage(Thread):
     @add_default_exception_handling('Failed to get storage usage')
     def run(self):
         """Run du and puts output in an array to display stuff which uses the most quota."""
-        out = sys_call('du  --all ~/. | sort -n | tail -n 21')
+        out = sys_call('du  --all ~ | sort -n | tail -n 21')
         lines = out.splitlines()
         lines.reverse()
         lines = lines[1:]
 
         self.model.usage = []
         for line in lines:
-            ll = line.split()
-            ll[0] = "{0:.4f}".format(float(ll[0])/1024) + 'MB'
-
-            self.model.usage.append(ll)
+            self.model.usage.append({
+                'name': ' '.join(line.split()[1:]),
+                'size': float(line.split()[0]) / 1024
+            })
 
         self.on_update()
         self.cleanup()

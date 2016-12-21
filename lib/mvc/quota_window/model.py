@@ -14,13 +14,13 @@ class QuotaWindowModel(ModelBase):
 
     def create_model(self):
         """Create model of TreeView which contains the actual data."""
-        store = Gtk.ListStore(str, str)
+        store = Gtk.ListStore(str, float)
 
         if(len(self.usage) == 0):
-            store.append(['loading', '...'])
+            store.append(['loading ...', 0.0])
             return store
 
         for file in self.usage:
-            store.append([file[1], file[0]])
+            store.append([file['name'], file['size']])
 
         return store

@@ -22,7 +22,9 @@ class QuotaWindowView(Gtk.Window, WindowViewBase):
         self.connect("delete-event", self.cb_close)
 
         # create tree view
-        self.tree_view = Gtk.TreeView(self.model.create_model())
+        sorted_model = Gtk.TreeModelSort(model=self.model.create_model())
+        sorted_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        self.tree_view = Gtk.TreeView(model=sorted_model)
 
         self.create_columns(self.tree_view)
 
@@ -41,7 +43,9 @@ class QuotaWindowView(Gtk.Window, WindowViewBase):
         if self.on_open is not None:
             self.on_open()
 
-        self.tree_view.set_model(self.model.create_model())
+        sorted_model = Gtk.TreeModelSort(model=self.model.create_model())
+        sorted_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        self.tree_view.set_model(model=sorted_model)
         self.show_all()
 
         return True
@@ -80,6 +84,9 @@ class QuotaWindowView(Gtk.Window, WindowViewBase):
         tree_view.append_column(column)
 
         rendererText = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Size", rendererText, text=1)
+        column = Gtk.TreeViewColumn("Size [MB]", rendererText, text=1)
         column.set_sort_column_id(1)
+
+        column.set_cell_data_func(rendererText, lambda col, cell, model, iter, unused: cell.set_property("text", '{0:.2f}'.format(model.get(iter, 1)[0])))
+
         tree_view.append_column(column)
