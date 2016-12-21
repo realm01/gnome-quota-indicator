@@ -6,9 +6,8 @@ from lib.mvc.quota_indicator.view import QuotaIndicatorView
 from lib.helpers import sys_call, get_path, getuid
 from lib.mvc.bases import ControllerBase
 from lib.exception_feedback import add_default_exception_handling
-
 from lib.mvc.notification_window.controller import NotificationWindowController
-
+from lib.constants import colors
 from PIL import Image, ImageDraw, ImageOps
 
 class QuotaIndicatorController(ControllerBase):
@@ -47,14 +46,16 @@ class QuotaIndicatorController(ControllerBase):
     def update_notification_window(self):
         """Validate quota results and update the notification window."""
         show = False
-        if self.model.quota['state'] == QuotaState.warning:
-            self.notification_window.model.title = 'You will soon reach your quota limit!'
-            show = True
-        elif self.model.quota['state'] == QuotaState.critical:
-            self.notification_window.model.title = 'You have almost reached your quota limit!'
-            show = True
+        if self.model.quota['state'] != QuotaState.good:
+            self.notification_window.model.text = 'Your quota usage is at'
+            self.notification_window.model.precentage = str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
 
-        self.notification_window.model.text = 'Current quota usage: ' + str(int(self.model.quota.get('progress_fraction') * 100)) + '%'
+            if self.model.quota['state'] == QuotaState.critical:
+                self.notification_window.model.precentage_color = colors['critical']['hex']
+            else:
+                self.notification_window.model.precentage_color = colors['warning']['hex']
+
+            show = True
 
         if show:
             self.notification_window.view.cb_show(0, 0)
@@ -134,15 +135,15 @@ class QuotaIndicatorController(ControllerBase):
             self.model.timers['critical'] -= self.model.config['refresh']['quota_rate']
 
             if curr / hard >= critical_level:
-                color = (244, 67, 54)
+                color = colors['critical']['rgb']
                 if self.model.timers['critical'] <= 0:
                     ret['state'] = QuotaState.critical
             elif curr / hard >= warning_level:
-                color = (255, 235, 59)
+                color = colors['warning']['rgb']
                 if self.model.timers['warning'] <= 0:
                     ret['state'] = QuotaState.warning
             else:
-                color = (76, 175, 80)
+                color = colors['good']['rgb']
 
             if 'state' not in ret:
                 ret['state'] = QuotaState.good

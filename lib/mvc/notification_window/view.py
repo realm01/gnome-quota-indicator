@@ -31,24 +31,20 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         # add image to hbox
         self.image = Gtk.Image()
         self.image.set_from_file(self.getIcon())
-        hbox.pack_start(self.image, False, True, 0)
+        hbox.pack_start(self.image, True, True, 0)
 
         # create vbox_right
         vbox_right = Gtk.VBox(spacing=0)
 
-        # add title to hbox
-        self.title_label = Gtk.Label(self.model.title)
-        vbox_right.pack_start(self.title_label, True, False, 0)
-
-        # add text to hbox
-        self.text_label = Gtk.Label(self.model.text)
-        vbox_right.pack_start(self.text_label, True, False, 0)
+        # add text to vbox_right
+        self.text_label = Gtk.Label(' '.join([self.model.text, self.model.precentage]))
+        vbox_right.pack_start(self.text_label, True, True, 0)
 
         # add vbox_right to hbox
-        hbox.pack_start(vbox_right, False, False, 0)
+        hbox.pack_start(vbox_right, True, True, 25)
 
         # add hbox to vbox
-        vbox.pack_start(hbox, False, False, 0)
+        vbox.pack_start(hbox, True, True, 0)
 
         # create hbox_buttons
         hbox_buttons = Gtk.HBox(spacing=0)
@@ -66,7 +62,7 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
         hbox_buttons.pack_start(button, True, True, 0)
 
         # add hbox_buttons to vbox
-        vbox.pack_start(hbox_buttons, False, True, 0)
+        vbox.pack_start(hbox_buttons, True, True, 0)
 
         # add vbox to window
         self.add(vbox)
@@ -99,8 +95,7 @@ class NotificationWindowView(Gtk.Window, WindowViewBase):
     def update(self):
         """Update the notification window view."""
         self.image.set_from_file(self.getIcon())
-        self.title_label.set_markup('<span font_weight="bold" foreground="Black" size="x-large">{title}</span>'.format(title=self.model.title))
-        self.text_label.set_text(self.model.text)
+        self.text_label.set_markup('<span font_weight="bold" foreground="Black" size="large">{text}</span> <span font_weight="bold" color="{color}" background="black" size="large">{precentage}</span>'.format(text=self.model.text, precentage=self.model.precentage, color=self.model.precentage_color))
         self.present()
 
         return True

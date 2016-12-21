@@ -8,5 +8,6 @@ class NotificationWindowModel(ModelBase):
     def __init__(self):
         """Ctor of NotificationWindowModel."""
         super().__init__()
-        self.title = ''
         self.text = ''
+        self.precentage = ''
+        self.precentage_color = ''
