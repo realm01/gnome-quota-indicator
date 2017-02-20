@@ -110,6 +110,9 @@ class QuotaIndicatorController(ControllerBase):
             quota_a = lines[-1]
             quota_a = quota_a.split()
 
+            if not quota_a[0][-1].isdigit():
+                quota_a[0] = quota_a[0][:-1]
+
             curr = float(quota_a[0])
             hard = float(quota_a[2])
 
